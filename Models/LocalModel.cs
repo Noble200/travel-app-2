@@ -1,14 +1,21 @@
 using System.Collections.Generic;
 
-namespace Allva.Desktop.ViewModels.Admin;
+namespace Allva.Desktop.Models;
 
 /// <summary>
 /// Modelo auxiliar para gestionar locales en el formulario
-/// ACTUALIZADO: Con todos los campos de la base de datos
+/// ACTUALIZADO: Con todos los campos de la base de datos + IdComercio
 /// </summary>
 public class LocalFormModel
 {
     public int IdLocal { get; set; }
+    
+    /// <summary>
+    /// ID del comercio al que pertenece este local
+    /// IMPORTANTE: Propiedad agregada para compatibilidad con ManageUsersViewModel
+    /// </summary>
+    public int IdComercio { get; set; }
+    
     public string CodigoLocal { get; set; } = string.Empty;
     public string NombreLocal { get; set; } = string.Empty;
     

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "r1PaI6IcO4H/6dw/jPAWEvQIuRbYUvW8TybTZ2/QpyP0MHJCkaJw7mEln5Vv0+wUBxepT8yjHqypKQpbvEIggw==",
+  "dgSpecHash": "uYm3upr38cykKvrMlwsnXdC7gzoRSgPQAtFUiSECB/Jmnn+5SHgoe0KG6aYmGcBolKEn90CojhqSRaLRUaKMwg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Ruso\\Desktop\\AllvaSystem - copia\\src\\Allva.Desktop\\Allva.Desktop.csproj",
   "expectedPackageFiles": [
@@ -17,6 +17,7 @@
     "C:\\Users\\Ruso\\.nuget\\packages\\avalonia.themes.fluent\\11.2.2\\avalonia.themes.fluent.11.2.2.nupkg.sha512",
     "C:\\Users\\Ruso\\.nuget\\packages\\avalonia.win32\\11.2.2\\avalonia.win32.11.2.2.nupkg.sha512",
     "C:\\Users\\Ruso\\.nuget\\packages\\avalonia.x11\\11.2.2\\avalonia.x11.11.2.2.nupkg.sha512",
+    "C:\\Users\\Ruso\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Ruso\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.2\\communitytoolkit.mvvm.8.2.2.nupkg.sha512",
     "C:\\Users\\Ruso\\.nuget\\packages\\dynamicdata\\8.4.1\\dynamicdata.8.4.1.nupkg.sha512",
     "C:\\Users\\Ruso\\.nuget\\packages\\harfbuzzsharp\\7.3.0.3\\harfbuzzsharp.7.3.0.3.nupkg.sha512",

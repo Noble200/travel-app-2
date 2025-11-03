@@ -34,6 +34,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [C:/Users/Ruso/Desktop/AllvaSystem - copia/src/Allva.Desktop/Views/Admin/ManageComerciosView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Users/Ruso/Desktop/AllvaSystem - copia/src/Allva.Desktop/Views/Admin/ManageUsersView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Users/Ruso/Desktop/AllvaSystem - copia/src/Allva.Desktop/Views/Admin/ManageUsuariosView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
