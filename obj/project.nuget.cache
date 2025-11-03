@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "9ONNsE7Y1yuELw5iWnxSIazwXwvzjGNMdgN6kxK5Ig6v6JCK+21eEMK8b5BqCw53tpTs4XO8M/ZMwLxVaMRnkw==",
+  "dgSpecHash": "r1PaI6IcO4H/6dw/jPAWEvQIuRbYUvW8TybTZ2/QpyP0MHJCkaJw7mEln5Vv0+wUBxepT8yjHqypKQpbvEIggw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Ruso\\Desktop\\AllvaSystem - copia\\src\\Allva.Desktop\\Allva.Desktop.csproj",
   "expectedPackageFiles": [
@@ -27,6 +27,8 @@
     "C:\\Users\\Ruso\\.nuget\\packages\\microcom.runtime\\0.11.0\\microcom.runtime.0.11.0.nupkg.sha512",
     "C:\\Users\\Ruso\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\9.0.10\\microsoft.extensions.dependencyinjection.9.0.10.nupkg.sha512",
     "C:\\Users\\Ruso\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.10\\microsoft.extensions.dependencyinjection.abstractions.9.0.10.nupkg.sha512",
+    "C:\\Users\\Ruso\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\Ruso\\.nuget\\packages\\npgsql\\9.0.4\\npgsql.9.0.4.nupkg.sha512",
     "C:\\Users\\Ruso\\.nuget\\packages\\reactiveui\\20.1.1\\reactiveui.20.1.1.nupkg.sha512",
     "C:\\Users\\Ruso\\.nuget\\packages\\skiasharp\\2.88.9\\skiasharp.2.88.9.nupkg.sha512",
     "C:\\Users\\Ruso\\.nuget\\packages\\skiasharp.nativeassets.linux\\2.88.9\\skiasharp.nativeassets.linux.2.88.9.nupkg.sha512",

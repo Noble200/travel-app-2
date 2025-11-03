@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Allva.Desktop.Services;
+using Allva.Desktop.Views.Admin;
 
 namespace Allva.Desktop.ViewModels.Admin;
 
@@ -72,11 +73,7 @@ public partial class AdminDashboardViewModel : ObservableObject
 
         CurrentView = SelectedModule switch
         {
-            "comercios" => CreatePlaceholderView(
-                "🏢 GESTIÓN DE COMERCIOS", 
-                "Módulo para administrar comercios/sucursales",
-                "• Crear nuevos comercios\n• Editar información de comercios\n• Asignar locales a comercios\n• Ver estadísticas por comercio"
-            ),
+            "comercios" => new ManageComerciosView(), // ✅ VISTA REAL FUNCIONAL
             "usuarios" => CreatePlaceholderView(
                 "👥 GESTIÓN DE USUARIOS", 
                 "Módulo para administrar usuarios del sistema",
@@ -121,65 +118,54 @@ public partial class AdminDashboardViewModel : ObservableObject
         var cardBorder = new Border
         {
             Background = Avalonia.Media.Brushes.White,
-            CornerRadius = new Avalonia.CornerRadius(12),
-            Padding = new Avalonia.Thickness(0),
+            CornerRadius = new Avalonia.CornerRadius(8),
+            Padding = new Avalonia.Thickness(40),
+            Margin = new Avalonia.Thickness(20),
             BoxShadow = new Avalonia.Media.BoxShadows(
                 new Avalonia.Media.BoxShadow
                 {
-                    Blur = 20,
-                    Color = Avalonia.Media.Color.FromArgb(40, 0, 0, 0),
-                    OffsetY = 2
-                }
-            )
+                    Blur = 15,
+                    Color = Avalonia.Media.Color.FromArgb(20, 0, 0, 0),
+                    OffsetX = 0,
+                    OffsetY = 4
+                })
         };
 
-        var contentStack = new StackPanel 
-        { 
-            Spacing = 0 
-        };
-
-        // Header amarillo
-        var headerBorder = new Border
-        {
-            Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#FFD966")),
-            Padding = new Avalonia.Thickness(30, 20, 30, 20),
-            CornerRadius = new Avalonia.CornerRadius(12, 12, 0, 0)
-        };
-
-        var headerText = new TextBlock
-        {
-            Text = title,
-            FontSize = 28,
-            FontWeight = Avalonia.Media.FontWeight.Bold,
-            Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#0b5394")),
-            TextAlignment = Avalonia.Media.TextAlignment.Left
-        };
-
-        headerBorder.Child = headerText;
-        contentStack.Children.Add(headerBorder);
-
-        // Border contenedor para el contenido (aquí va el Padding)
-        var contentBorder = new Border
-        {
-            Padding = new Avalonia.Thickness(40, 40, 40, 40)
-        };
-
-        // Contenido interno (sin Padding, ya está en el Border)
         var contentPanel = new StackPanel
         {
-            Spacing = 20,
+            Spacing = 25,
             HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
+        };
+
+        // Icono decorativo
+        var iconBlock = new TextBlock
+        {
+            Text = "🚧",
+            FontSize = 64,
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+            Margin = new Avalonia.Thickness(0, 0, 0, 15)
+        };
+
+        // Título principal
+        var titleBlock = new TextBlock
+        {
+            Text = title,
+            FontSize = 26,
+            FontWeight = Avalonia.Media.FontWeight.Bold,
+            Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#0b5394")),
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+            TextAlignment = Avalonia.Media.TextAlignment.Center
         };
 
         // Subtítulo
         var subtitleBlock = new TextBlock
         {
             Text = subtitle,
-            FontSize = 18,
-            Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#595959")),
-            TextAlignment = Avalonia.Media.TextAlignment.Center,
+            FontSize = 16,
+            Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#666666")),
             HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+            TextAlignment = Avalonia.Media.TextAlignment.Center,
             Margin = new Avalonia.Thickness(0, 0, 0, 20)
         };
 
@@ -187,74 +173,76 @@ public partial class AdminDashboardViewModel : ObservableObject
         var separator = new Border
         {
             Height = 2,
-            Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#FFD966")),
-            Margin = new Avalonia.Thickness(0, 10, 0, 20),
-            Width = 200,
-            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
+            Width = 100,
+            Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#ffd966")),
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+            Margin = new Avalonia.Thickness(0, 10, 0, 20)
         };
 
-        // Features
-        var featuresBlock = new TextBlock
+        // Panel de características
+        var featuresPanel = new StackPanel
+        {
+            Spacing = 12,
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+            Margin = new Avalonia.Thickness(40, 20, 40, 20)
+        };
+
+        var featuresTitle = new TextBlock
+        {
+            Text = "Características del módulo:",
+            FontSize = 15,
+            FontWeight = Avalonia.Media.FontWeight.SemiBold,
+            Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#0b5394")),
+            Margin = new Avalonia.Thickness(0, 0, 0, 10)
+        };
+
+        var featuresText = new TextBlock
         {
             Text = features,
-            FontSize = 15,
-            Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#595959")),
-            TextAlignment = Avalonia.Media.TextAlignment.Left,
-            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-            LineHeight = 24,
-            Margin = new Avalonia.Thickness(0, 0, 0, 30)
-        };
-
-        // Badge "En desarrollo"
-        var badge = new Border
-        {
-            Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#FFD966")),
-            CornerRadius = new Avalonia.CornerRadius(20),
-            Padding = new Avalonia.Thickness(20, 10, 20, 10),
-            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
-        };
-
-        var badgeText = new TextBlock
-        {
-            Text = "🚧 EN DESARROLLO",
             FontSize = 14,
-            FontWeight = Avalonia.Media.FontWeight.Bold,
-            Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#0b5394"))
+            Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#555555")),
+            LineHeight = 24
         };
 
-        badge.Child = badgeText;
+        featuresPanel.Children.Add(featuresTitle);
+        featuresPanel.Children.Add(featuresText);
 
-        // Mensaje informativo
-        var infoBlock = new TextBlock
+        // Banner de estado
+        var statusBanner = new Border
         {
-            Text = "Los controladores y funcionalidades se implementarán próximamente.\nLa interfaz visual ya está lista.",
-            FontSize = 13,
-            Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#999999")),
-            TextAlignment = Avalonia.Media.TextAlignment.Center,
-            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-            Margin = new Avalonia.Thickness(0, 20, 0, 0),
-            LineHeight = 20
+            Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#fff3cd")),
+            BorderBrush = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#ffd966")),
+            BorderThickness = new Avalonia.Thickness(2),
+            CornerRadius = new Avalonia.CornerRadius(8),
+            Padding = new Avalonia.Thickness(20, 15),
+            Margin = new Avalonia.Thickness(0, 20, 0, 0)
         };
 
-        // Agregar elementos al panel de contenido
+        var statusText = new TextBlock
+        {
+            Text = "⚠️ Este módulo está en desarrollo y pronto estará disponible",
+            FontSize = 14,
+            Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#856404")),
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+            FontWeight = Avalonia.Media.FontWeight.Medium
+        };
+
+        statusBanner.Child = statusText;
+
+        // Ensamblar todo
+        contentPanel.Children.Add(iconBlock);
+        contentPanel.Children.Add(titleBlock);
         contentPanel.Children.Add(subtitleBlock);
         contentPanel.Children.Add(separator);
-        contentPanel.Children.Add(featuresBlock);
-        contentPanel.Children.Add(badge);
-        contentPanel.Children.Add(infoBlock);
+        contentPanel.Children.Add(featuresPanel);
+        contentPanel.Children.Add(statusBanner);
 
-        // El StackPanel va dentro del Border con padding
-        contentBorder.Child = contentPanel;
-        contentStack.Children.Add(contentBorder);
-        
-        cardBorder.Child = contentStack;
+        cardBorder.Child = contentPanel;
         mainPanel.Children.Add(cardBorder);
 
-        var userControl = new UserControl
+        return new UserControl
         {
             Content = mainPanel
         };
-
-        return userControl;
     }
 }

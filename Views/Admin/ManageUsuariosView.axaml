@@ -4,277 +4,214 @@
              x:Class="Allva.Desktop.Views.Admin.ManageUsuariosView"
              x:DataType="vm:ManageUsuariosViewModel">
 
+    <!-- Importar estilos del admin -->
+    <UserControl.Styles>
+        <StyleInclude Source="AdminDashboardView.Styles.axaml"/>
+    </UserControl.Styles>
+
     <!-- ============================================ -->
     <!-- GESTIÓN DE USUARIOS -->
-    <!-- Vista con lista de usuarios y filtros -->
+    <!-- Vista con tabla de datos estilo profesional -->
     <!-- ============================================ -->
 
-    <Grid>
-        <!-- Fondo -->
-        <Border Background="White"
-                CornerRadius="12"
-                BoxShadow="0 2 12 0 #20000000"/>
+    <StackPanel>
+        
+        <!-- Tabla de usuarios -->
+        <Grid>
+            <!-- Header de la tabla (amarillo) -->
+            <Grid RowDefinitions="Auto,Auto">
+                
+                <!-- Fila de encabezados -->
+                <Border Grid.Row="0" Classes="admin-table-header">
+                    <Grid ColumnDefinitions="0.9*,1.1*,1*,1*,1.2*,0.8*">
+                        <TextBlock Grid.Column="0" Text="Usuario" Classes="admin-table-header-text"/>
+                        <TextBlock Grid.Column="1" Text="Nombre Completo" Classes="admin-table-header-text"/>
+                        <TextBlock Grid.Column="2" Text="Comercio" Classes="admin-table-header-text"/>
+                        <TextBlock Grid.Column="3" Text="Local(es)" Classes="admin-table-header-text"/>
+                        <TextBlock Grid.Column="4" Text="Email" Classes="admin-table-header-text"/>
+                        <TextBlock Grid.Column="5" Text="Rol" Classes="admin-table-header-text"/>
+                    </Grid>
+                </Border>
 
-        <!-- Contenido principal -->
-        <Grid RowDefinitions="Auto,*">
-            
-            <!-- ═══════════════════════════════════════════ -->
-            <!-- HEADER con filtros y botón nuevo -->
-            <!-- ═══════════════════════════════════════════ -->
-            <Border Grid.Row="0"
-                    Background="#FFD966"
-                    Padding="25,20"
-                    CornerRadius="12,12,0,0">
-                <Grid ColumnDefinitions="*,Auto">
-                    
-                    <!-- Filtros -->
-                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                <!-- Contenedor de filas de datos -->
+                <ScrollViewer Grid.Row="1" 
+                              MaxHeight="500"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
                         
-                        <TextBox Classes="allva"
-                                 Watermark="🔍 Buscar por nombre..."
-                                 Width="200"
-                                 VerticalAlignment="Center"/>
-                        
-                        <TextBox Classes="allva"
-                                 Watermark="🏢 Filtrar por comercio..."
-                                 Width="180"
-                                 VerticalAlignment="Center"/>
-                        
-                        <TextBox Classes="allva"
-                                 Watermark="🏪 Filtrar por local..."
-                                 Width="180"
-                                 VerticalAlignment="Center"/>
-                        
-                        <Button Classes="primary"
-                                Content="Aplicar filtros"
-                                VerticalAlignment="Center"/>
-                        
-                        <Button Classes="outline"
-                                Content="Limpiar"
-                                VerticalAlignment="Center"/>
+                        <!-- Fila de datos 1 -->
+                        <Border Classes="admin-table-row">
+                            <Grid ColumnDefinitions="0.9*,1.1*,1*,1*,1.2*,0.8*">
+                                <TextBlock Grid.Column="0" Text="ana_gomez" Classes="admin-table-cell" FontWeight="Medium"/>
+                                <TextBlock Grid.Column="1" Text="Ana Gómez" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="2" Text="Agencia Suárez" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="3" Text="AGS0001" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="4" Text="ana@suarez.com" Classes="admin-table-cell"/>
+                                <Border Grid.Column="5" 
+                                        Background="#2196F3"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Center">
+                                    <TextBlock Text="Operador" 
+                                               FontSize="11" 
+                                               FontWeight="SemiBold"
+                                               Foreground="White"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Fila de datos 2 -->
+                        <Border Classes="admin-table-row">
+                            <Grid ColumnDefinitions="0.9*,1.1*,1*,1*,1.2*,0.8*">
+                                <TextBlock Grid.Column="0" Text="carlos_ruiz" Classes="admin-table-cell" FontWeight="Medium"/>
+                                <TextBlock Grid.Column="1" Text="Carlos Ruiz" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="2" Text="Viajes González" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="3" Text="VGZ0001, VGZ0002" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="4" Text="cruiz@gonzalez.com" Classes="admin-table-cell"/>
+                                <Border Grid.Column="5" 
+                                        Background="#FF9800"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Center">
+                                    <TextBlock Text="Supervisor" 
+                                               FontSize="11" 
+                                               FontWeight="SemiBold"
+                                               Foreground="White"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Fila de datos 3 -->
+                        <Border Classes="admin-table-row">
+                            <Grid ColumnDefinitions="0.9*,1.1*,1*,1*,1.2*,0.8*">
+                                <TextBlock Grid.Column="0" Text="maria_lopez" Classes="admin-table-cell" FontWeight="Medium"/>
+                                <TextBlock Grid.Column="1" Text="María López" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="2" Text="Turismo Martínez" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="3" Text="TMZ0001" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="4" Text="mlopez@martinez.com" Classes="admin-table-cell"/>
+                                <Border Grid.Column="5" 
+                                        Background="#2196F3"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Center">
+                                    <TextBlock Text="Operador" 
+                                               FontSize="11" 
+                                               FontWeight="SemiBold"
+                                               Foreground="White"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Fila de datos 4 -->
+                        <Border Classes="admin-table-row">
+                            <Grid ColumnDefinitions="0.9*,1.1*,1*,1*,1.2*,0.8*">
+                                <TextBlock Grid.Column="0" Text="pedro_sanchez" Classes="admin-table-cell" FontWeight="Medium"/>
+                                <TextBlock Grid.Column="1" Text="Pedro Sánchez" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="2" Text="Destinos López" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="3" Text="DLZ0001" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="4" Text="psanchez@lopez.com" Classes="admin-table-cell"/>
+                                <Border Grid.Column="5" 
+                                        Background="#2196F3"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Center">
+                                    <TextBlock Text="Operador" 
+                                               FontSize="11" 
+                                               FontWeight="SemiBold"
+                                               Foreground="White"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Fila de datos 5 -->
+                        <Border Classes="admin-table-row">
+                            <Grid ColumnDefinitions="0.9*,1.1*,1*,1*,1.2*,0.8*">
+                                <TextBlock Grid.Column="0" Text="laura_fernandez" Classes="admin-table-cell" FontWeight="Medium"/>
+                                <TextBlock Grid.Column="1" Text="Laura Fernández" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="2" Text="Travel World" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="3" Text="TWD0001" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="4" Text="lfernandez@travelworld.com" Classes="admin-table-cell"/>
+                                <Border Grid.Column="5" 
+                                        Background="#9C27B0"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Center">
+                                    <TextBlock Text="Admin" 
+                                               FontSize="11" 
+                                               FontWeight="SemiBold"
+                                               Foreground="White"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Fila de datos 6 -->
+                        <Border Classes="admin-table-row">
+                            <Grid ColumnDefinitions="0.9*,1.1*,1*,1*,1.2*,0.8*">
+                                <TextBlock Grid.Column="0" Text="javier_mora" Classes="admin-table-cell" FontWeight="Medium"/>
+                                <TextBlock Grid.Column="1" Text="Javier Mora" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="2" Text="Agencia Suárez" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="3" Text="AGS0002" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="4" Text="jmora@suarez.com" Classes="admin-table-cell"/>
+                                <Border Grid.Column="5" 
+                                        Background="#2196F3"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Center">
+                                    <TextBlock Text="Operador" 
+                                               FontSize="11" 
+                                               FontWeight="SemiBold"
+                                               Foreground="White"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Fila de datos 7 -->
+                        <Border Classes="admin-table-row">
+                            <Grid ColumnDefinitions="0.9*,1.1*,1*,1*,1.2*,0.8*">
+                                <TextBlock Grid.Column="0" Text="isabel_torres" Classes="admin-table-cell" FontWeight="Medium"/>
+                                <TextBlock Grid.Column="1" Text="Isabel Torres" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="2" Text="Viajes González" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="3" Text="VGZ0003" Classes="admin-table-cell"/>
+                                <TextBlock Grid.Column="4" Text="itorres@gonzalez.com" Classes="admin-table-cell"/>
+                                <Border Grid.Column="5" 
+                                        Background="#2196F3"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Center">
+                                    <TextBlock Text="Operador" 
+                                               FontSize="11" 
+                                               FontWeight="SemiBold"
+                                               Foreground="White"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Espacio al final -->
+                        <Border Height="20"/>
+
                     </StackPanel>
+                </ScrollViewer>
 
-                    <!-- Botón nuevo usuario -->
-                    <Button Grid.Column="1"
-                            Classes="secondary"
-                            Content="+ Nuevo Usuario"
-                            FontSize="15"
-                            Padding="16,10"
-                            VerticalAlignment="Center"/>
-
-                </Grid>
-            </Border>
-
-            <!-- ═══════════════════════════════════════════ -->
-            <!-- LISTA DE USUARIOS -->
-            <!-- ═══════════════════════════════════════════ -->
-            <ScrollViewer Grid.Row="1" Padding="25">
-                <StackPanel Spacing="12">
-
-                    <!-- Card de usuario - Ejemplo 1 -->
-                    <Border Classes="card">
-                        <Grid ColumnDefinitions="*,Auto">
-                            
-                            <!-- Información del usuario -->
-                            <StackPanel Grid.Column="0" Spacing="6">
-                                <TextBlock Text="ANA_GÓMEZ"
-                                           FontSize="18"
-                                           FontWeight="Bold"
-                                           Foreground="#0b5394"/>
-                                <TextBlock Text="👤 Nombre: Ana Gómez"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📞 Teléfono: 600123456"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📧 Email: ana@gmail.com"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="🏢 Comercio: Agencia Suárez"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="🏪 Locales: AGS0001"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                
-                                <!-- Badge tipo de usuario -->
-                                <Border Background="#fff3cd"
-                                        CornerRadius="12"
-                                        Padding="8,4"
-                                        HorizontalAlignment="Left"
-                                        Margin="0,6,0,0">
-                                    <TextBlock Text="🏷️ Regular"
-                                               FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="#856404"/>
-                                </Border>
-                            </StackPanel>
-
-                            <!-- Botones de acción -->
-                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
-                                <Button Classes="primary"
-                                        Content="✏️ Editar"
-                                        Width="100"/>
-                                <Button Classes="outline"
-                                        Content="🗑️ Eliminar"
-                                        Width="100"/>
-                            </StackPanel>
-
-                        </Grid>
-                    </Border>
-
-                    <!-- Card de usuario - Ejemplo 2 -->
-                    <Border Classes="card">
-                        <Grid ColumnDefinitions="*,Auto">
-                            
-                            <StackPanel Grid.Column="0" Spacing="6">
-                                <TextBlock Text="LUIS_PÉREZ"
-                                           FontSize="18"
-                                           FontWeight="Bold"
-                                           Foreground="#0b5394"/>
-                                <TextBlock Text="👤 Nombre: Luis Pérez"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📞 Teléfono: 600654321"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📧 Email: luis@gmail.com"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="🏢 Comercio: Agencia Suárez"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="🏪 Locales: AGS0002"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                
-                                <Border Background="#fff3cd"
-                                        CornerRadius="12"
-                                        Padding="8,4"
-                                        HorizontalAlignment="Left"
-                                        Margin="0,6,0,0">
-                                    <TextBlock Text="🏷️ Regular"
-                                               FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="#856404"/>
-                                </Border>
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
-                                <Button Classes="primary"
-                                        Content="✏️ Editar"
-                                        Width="100"/>
-                                <Button Classes="outline"
-                                        Content="🗑️ Eliminar"
-                                        Width="100"/>
-                            </StackPanel>
-
-                        </Grid>
-                    </Border>
-
-                    <!-- Card de usuario - Ejemplo 3 (Flotante) -->
-                    <Border Classes="card">
-                        <Grid ColumnDefinitions="*,Auto">
-                            
-                            <StackPanel Grid.Column="0" Spacing="6">
-                                <TextBlock Text="CARLOS_RAMÍREZ"
-                                           FontSize="18"
-                                           FontWeight="Bold"
-                                           Foreground="#0b5394"/>
-                                <TextBlock Text="👤 Nombre: Carlos Ramírez"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📞 Teléfono: 600456789"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📧 Email: carlos@gmail.com"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="🏢 Comercio: Agencia Suárez"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="🏪 Locales: AGS0001, AGS0002"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                
-                                <!-- Badge Flotante -->
-                                <Border Background="#e3f2fd"
-                                        CornerRadius="12"
-                                        Padding="8,4"
-                                        HorizontalAlignment="Left"
-                                        Margin="0,6,0,0">
-                                    <TextBlock Text="🏷️ Flotante"
-                                               FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="#0b5394"/>
-                                </Border>
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
-                                <Button Classes="primary"
-                                        Content="✏️ Editar"
-                                        Width="100"/>
-                                <Button Classes="outline"
-                                        Content="🗑️ Eliminar"
-                                        Width="100"/>
-                            </StackPanel>
-
-                        </Grid>
-                    </Border>
-
-                    <!-- Card de usuario - Ejemplo 4 -->
-                    <Border Classes="card">
-                        <Grid ColumnDefinitions="*,Auto">
-                            
-                            <StackPanel Grid.Column="0" Spacing="6">
-                                <TextBlock Text="MARTA_LOPEZ"
-                                           FontSize="18"
-                                           FontWeight="Bold"
-                                           Foreground="#0b5394"/>
-                                <TextBlock Text="👤 Nombre: Marta Lopez"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📞 Teléfono: 600987654"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📧 Email: marta@gmail.com"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="🏢 Comercio: Latin Servicios"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="🏪 Locales: LSE0001"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                
-                                <Border Background="#fff3cd"
-                                        CornerRadius="12"
-                                        Padding="8,4"
-                                        HorizontalAlignment="Left"
-                                        Margin="0,6,0,0">
-                                    <TextBlock Text="🏷️ Regular"
-                                               FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="#856404"/>
-                                </Border>
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
-                                <Button Classes="primary"
-                                        Content="✏️ Editar"
-                                        Width="100"/>
-                                <Button Classes="outline"
-                                        Content="🗑️ Eliminar"
-                                        Width="100"/>
-                            </StackPanel>
-
-                        </Grid>
-                    </Border>
-
-                </StackPanel>
-            </ScrollViewer>
-
+            </Grid>
         </Grid>
-    </Grid>
+
+        <!-- Mensaje informativo al final -->
+        <Border Background="#E3F2FD"
+                Padding="20"
+                Margin="20"
+                CornerRadius="8">
+            <StackPanel Spacing="8">
+                <TextBlock Text="ℹ️ Funcionalidad en desarrollo"
+                           FontSize="15"
+                           FontWeight="SemiBold"
+                           Foreground="#1976D2"/>
+                <TextBlock Text="Los datos mostrados son ejemplos. Próximamente podrás agregar, editar y gestionar usuarios desde esta interfaz."
+                           FontSize="13"
+                           Foreground="#424242"
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+
+    </StackPanel>
 
 </UserControl>

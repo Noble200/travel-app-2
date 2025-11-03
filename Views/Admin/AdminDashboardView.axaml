@@ -8,103 +8,76 @@
         <vm:AdminDashboardViewModel />
     </Design.DataContext>
 
+    <!-- Importar estilos específicos del admin -->
+    <UserControl.Styles>
+        <StyleInclude Source="AdminDashboardView.Styles.axaml"/>
+    </UserControl.Styles>
+
     <!-- ============================================ -->
     <!-- PANEL DE ADMINISTRACIÓN -->
-    <!-- Fondo amarillo con sidebar azul y contenido -->
+    <!-- Solo 2 módulos: Gestión de Comercios y Usuarios -->
     <!-- ============================================ -->
 
     <Grid>
-        <!-- Fondo amarillo general -->
-        <Border Background="#FFD966" />
+        <!-- Fondo amarillo corporativo -->
+        <Border Classes="admin-background" />
 
         <!-- Grid principal: Sidebar + Contenido -->
-        <Grid ColumnDefinitions="240,*">
+        <Grid ColumnDefinitions="220,*">
             
             <!-- ═══════════════════════════════════════════ -->
-            <!-- SIDEBAR (Menu lateral izquierdo) -->
+            <!-- SIDEBAR BLANCO (Menu lateral izquierdo) -->
             <!-- ═══════════════════════════════════════════ -->
-            <Border Grid.Column="0" Classes="sidebar">
+            <Border Grid.Column="0" Classes="admin-sidebar">
                 <StackPanel>
                     
                     <!-- Logo Allva -->
-                    <Border Padding="20" Margin="0,20,0,40">
-                        <Border Background="#FFD966"
-                                CornerRadius="12"
-                                Padding="16,8"
-                                HorizontalAlignment="Center">
-                            <TextBlock Text="Allva"
-                                       FontSize="32"
-                                       FontWeight="Bold"
-                                       Foreground="#0b5394"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       TextAlignment="Center"/>
-                        </Border>
+                    <Border Classes="admin-logo-container">
+                        <TextBlock Classes="admin-logo-text"/>
                     </Border>
 
-                    <!-- Título del panel -->
+                    <!-- Separador -->
+                    <Border Classes="admin-menu-separator"/>
+
+                    <!-- Sección: Panel de Administración -->
                     <TextBlock Text="Panel de Administración"
-                               FontSize="16"
-                               FontWeight="SemiBold"
-                               Foreground="White"
-                               TextAlignment="Center"
-                               Margin="0,0,0,20"
-                               Padding="10"/>
+                               FontSize="13"
+                               Foreground="#808080"
+                               Padding="20,15,20,8"
+                               FontWeight="Medium"/>
 
-                    <!-- Nombre del administrador -->
-                    <Border Background="#20FFFFFF"
-                            Padding="12"
-                            Margin="15,0,15,30"
-                            CornerRadius="8">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="👤"
-                                       FontSize="18"
-                                       VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding AdminName}"
-                                       FontSize="14"
-                                       FontWeight="Medium"
-                                       Foreground="White"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Menú de navegación -->
-                    <StackPanel Spacing="0">
+                    <!-- Menú de navegación - Solo 2 módulos -->
+                    <StackPanel>
                         
-                        <!-- Gestión de Comercios -->
-                        <Button Classes="menu-item"
+                        <!-- Gestión de comercios -->
+                        <Button Classes="admin-menu-item"
                                 Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='comercios'}"
                                 Command="{Binding NavigateToModuleCommand}"
                                 CommandParameter="comercios">
-                            <StackPanel Orientation="Horizontal" Spacing="10">
-                                <TextBlock Text="🏢" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="Gestión de Comercios" FontSize="14" VerticalAlignment="Center"/>
-                            </StackPanel>
+                            <TextBlock Text="Gestión de comercios" Classes="admin-menu-text"/>
                         </Button>
 
-                        <!-- Gestión de Usuarios -->
-                        <Button Classes="menu-item"
+                        <!-- Gestión de usuarios -->
+                        <Button Classes="admin-menu-item"
                                 Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='usuarios'}"
                                 Command="{Binding NavigateToModuleCommand}"
                                 CommandParameter="usuarios">
-                            <StackPanel Orientation="Horizontal" Spacing="10">
-                                <TextBlock Text="👥" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="Gestión de Usuarios" FontSize="14" VerticalAlignment="Center"/>
-                            </StackPanel>
+                            <TextBlock Text="Gestión de usuarios" Classes="admin-menu-text"/>
                         </Button>
 
                     </StackPanel>
 
-                    <!-- Espaciador -->
-                    <Border Height="1" Margin="15,30,15,30" Background="#40FFFFFF"/>
+                    <!-- Espaciador para empujar el botón de cerrar sesión al fondo -->
+                    <Border Height="1" Margin="0,30,0,0"/>
 
-                    <!-- Botón Cerrar Sesión -->
-                    <Button Classes="menu-item"
+                    <!-- Botón Cerrar Sesión al final -->
+                    <Button Classes="admin-menu-item"
                             Command="{Binding LogoutCommand}"
-                            Margin="0,10,0,20">
+                            VerticalAlignment="Bottom"
+                            Margin="0,20,0,20">
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <TextBlock Text="🚪" FontSize="16" VerticalAlignment="Center"/>
-                            <TextBlock Text="Cerrar Sesión" FontSize="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="Cerrar Sesión" Classes="admin-menu-text"/>
                         </StackPanel>
                     </Button>
 
@@ -114,97 +87,86 @@
             <!-- ═══════════════════════════════════════════ -->
             <!-- CONTENIDO PRINCIPAL (Área de trabajo) -->
             <!-- ═══════════════════════════════════════════ -->
-            <Grid Grid.Column="1" Margin="30">
+            <Border Grid.Column="1" Classes="admin-content-panel">
                 
-                <!-- Header superior -->
-                <StackPanel>
+                <Grid ColumnDefinitions="260,*" RowDefinitions="*">
                     
-                    <!-- Panel blanco con logo y título -->
-                    <Border Background="White"
-                            CornerRadius="15"
-                            Padding="25,20"
-                            BoxShadow="0 2 12 0 #20000000"
-                            Margin="0,0,0,25">
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            
-                            <!-- Logo pequeño -->
-                            <Border Grid.Column="0"
-                                    Background="#FFD966"
-                                    CornerRadius="10"
-                                    Padding="16,8"
-                                    Margin="0,0,20,0">
-                                <TextBlock Text="Allva"
-                                           FontSize="24"
-                                           FontWeight="Bold"
-                                           Foreground="#0b5394"/>
-                            </Border>
-
-                            <!-- Título del módulo actual -->
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding SelectedModuleTitle}"
-                                           Classes="page-title"
-                                           Margin="0,0,0,4"/>
-                                <TextBlock Text="Panel de administración del sistema"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                            </StackPanel>
-
-                            <!-- Iconos de usuario y notificaciones -->
-                            <StackPanel Grid.Column="2" 
-                                        Orientation="Horizontal" 
-                                        Spacing="12"
-                                        VerticalAlignment="Center">
+                    <!-- ═══════════════════════════════════════════ -->
+                    <!-- PANEL DE FILTROS LATERAL IZQUIERDO -->
+                    <!-- ═══════════════════════════════════════════ -->
+                    <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+                        <Border Classes="admin-filters-panel">
+                            <StackPanel Spacing="18">
                                 
-                                <!-- Notificaciones -->
-                                <Border Background="#f3f3f3"
-                                        Width="40"
-                                        Height="40"
-                                        CornerRadius="20"
-                                        Cursor="Hand">
-                                    <TextBlock Text="🔔"
-                                               FontSize="20"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
-                                </Border>
+                                <!-- Título del panel de filtros -->
+                                <TextBlock Text="Filtros generales" Classes="admin-filters-title"/>
 
-                                <!-- Perfil -->
-                                <Border Background="#f3f3f3"
-                                        Width="40"
-                                        Height="40"
-                                        CornerRadius="20"
-                                        Cursor="Hand">
-                                    <TextBlock Text="👤"
-                                               FontSize="20"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
-                                </Border>
+                                <!-- Filtro: Comercio -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Comercio" Classes="admin-filter-label"/>
+                                    <TextBox Classes="admin-input" Watermark="Seleccionar..."/>
+                                </StackPanel>
 
-                                <!-- Menú hamburguesa -->
-                                <Border Background="#0b5394"
-                                        Width="40"
-                                        Height="40"
-                                        CornerRadius="6"
-                                        Cursor="Hand">
-                                    <TextBlock Text="☰"
-                                               FontSize="24"
-                                               Foreground="White"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
-                                </Border>
+                                <!-- Filtro: Local -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Local" Classes="admin-filter-label"/>
+                                    <TextBox Classes="admin-input" Watermark="Seleccionar..."/>
+                                </StackPanel>
+
+                                <!-- Filtro: Fecha -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Fecha" Classes="admin-filter-label"/>
+                                    <DatePicker Classes="admin-date" 
+                                                HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+
+                                <!-- Filtro: Estado operación -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Estado" Classes="admin-filter-label"/>
+                                    <ComboBox Classes="admin-combo" 
+                                              HorizontalAlignment="Stretch">
+                                        <ComboBoxItem Content="Todos"/>
+                                        <ComboBoxItem Content="Activo"/>
+                                        <ComboBoxItem Content="Inactivo"/>
+                                        <ComboBoxItem Content="Pendiente"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <!-- Botón de aplicar filtros -->
+                                <Button Classes="admin-btn-yellow" 
+                                        Content="Aplicar Filtros"
+                                        HorizontalAlignment="Stretch"
+                                        Margin="0,10,0,0"/>
 
                             </StackPanel>
+                        </Border>
+                    </ScrollViewer>
 
-                        </Grid>
-                    </Border>
+                    <!-- ═══════════════════════════════════════════ -->
+                    <!-- ÁREA DE CONTENIDO PRINCIPAL -->
+                    <!-- ═══════════════════════════════════════════ -->
+                    <Grid Grid.Column="1" RowDefinitions="Auto,*">
+                        
+                        <!-- Header del módulo (azul oscuro) -->
+                        <Border Grid.Row="0" Classes="admin-module-header">
+                            <TextBlock Text="{Binding SelectedModuleTitle}" 
+                                       Classes="admin-module-title"/>
+                        </Border>
 
-                    <!-- Área de contenido dinámico -->
-                    <ContentControl Content="{Binding CurrentView}"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"/>
+                        <!-- Contenido dinámico del módulo -->
+                        <ScrollViewer Grid.Row="1" 
+                                      VerticalScrollBarVisibility="Auto"
+                                      Padding="0">
+                            <ContentControl Content="{Binding CurrentView}"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"/>
+                        </ScrollViewer>
 
-                </StackPanel>
+                    </Grid>
 
-            </Grid>
+                </Grid>
+
+            </Border>
 
         </Grid>
     </Grid>

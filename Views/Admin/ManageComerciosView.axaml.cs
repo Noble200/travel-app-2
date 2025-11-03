@@ -1,12 +1,17 @@
 using Avalonia.Controls;
+using Allva.Desktop.ViewModels.Admin;
 
-namespace Allva.Desktop.Views.Admin
+namespace Allva.Desktop.Views.Admin;
+
+/// <summary>
+/// Vista para el módulo de Gestión de Comercios
+/// Code-behind mínimo siguiendo patrón MVVM
+/// </summary>
+public partial class ManageComerciosView : UserControl
 {
-    public partial class ManageComerciosView : UserControl
+    public ManageComerciosView()
     {
-        public ManageComerciosView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        DataContext = new ManageComerciosViewModel();
     }
 }

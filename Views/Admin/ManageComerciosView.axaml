@@ -1,181 +1,726 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             xmlns:m="using:Allva.Desktop.Models.Admin"
              x:Class="Allva.Desktop.Views.Admin.ManageComerciosView"
              x:DataType="vm:ManageComerciosViewModel">
 
+    <Design.DataContext>
+        <vm:ManageComerciosViewModel />
+    </Design.DataContext>
+
     <!-- ============================================ -->
-    <!-- GESTIÓN DE COMERCIOS -->
-    <!-- Vista con lista y formulario lateral -->
+    <!-- GESTIÓN DE COMERCIOS - PANEL COMPLETO -->
+    <!-- Diseño adaptado al estilo Allva -->
     <!-- ============================================ -->
 
-    <Grid>
-        <!-- Fondo -->
-        <Border Background="White"
-                CornerRadius="12"
-                BoxShadow="0 2 12 0 #20000000"/>
-
-        <!-- Contenido principal -->
-        <Grid RowDefinitions="Auto,*">
-            
-            <!-- ═══════════════════════════════════════════ -->
-            <!-- HEADER con filtros y botón nuevo -->
-            <!-- ═══════════════════════════════════════════ -->
-            <Border Grid.Row="0"
-                    Background="#FFD966"
-                    Padding="25,20"
-                    CornerRadius="12,12,0,0">
-                <Grid ColumnDefinitions="*,Auto">
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- BARRA SUPERIOR CON ESTADÍSTICAS Y BOTÓN -->
+        <!-- ═══════════════════════════════════════════ -->
+        <Border Grid.Row="0" 
+                Background="#0b5394" 
+                Padding="20,15"
+                Margin="0,0,0,15">
+            <Grid ColumnDefinitions="*,Auto">
+                
+                <!-- Estadísticas -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="30">
                     
-                    <!-- Filtros -->
-                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
-                        
-                        <TextBox Classes="allva"
-                                 Watermark="🔍 Buscar por nombre..."
-                                 Width="200"
-                                 VerticalAlignment="Center"/>
-                        
-                        <TextBox Classes="allva"
-                                 Watermark="📍 Filtrar por país..."
-                                 Width="180"
-                                 VerticalAlignment="Center"/>
-                        
-                        <Button Classes="primary"
-                                Content="Aplicar filtros"
-                                VerticalAlignment="Center"/>
-                        
-                        <Button Classes="outline"
-                                Content="Limpiar"
-                                VerticalAlignment="Center"/>
+                    <!-- Total Comercios -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Total Comercios" 
+                                   FontSize="11" 
+                                   Foreground="#e0e0e0"/>
+                        <TextBlock Text="{Binding TotalComercios}" 
+                                   FontSize="22" 
+                                   FontWeight="Bold" 
+                                   Foreground="White"/>
                     </StackPanel>
-
-                    <!-- Botón nuevo comercio -->
-                    <Button Grid.Column="1"
-                            Classes="secondary"
-                            Content="+ Nuevo Comercio"
-                            FontSize="15"
-                            Padding="16,10"
-                            VerticalAlignment="Center"/>
-
-                </Grid>
-            </Border>
-
-            <!-- ═══════════════════════════════════════════ -->
-            <!-- LISTA DE COMERCIOS -->
-            <!-- ═══════════════════════════════════════════ -->
-            <ScrollViewer Grid.Row="1" Padding="25">
-                <StackPanel Spacing="12">
-
-                    <!-- Card de comercio - Ejemplo 1 -->
-                    <Border Classes="card">
-                        <Grid ColumnDefinitions="*,Auto">
-                            
-                            <!-- Información del comercio -->
-                            <StackPanel Grid.Column="0" Spacing="6">
-                                <TextBlock Text="Agencia Suárez"
-                                           FontSize="18"
-                                           FontWeight="Bold"
-                                           Foreground="#0b5394"/>
-                                <TextBlock Text="📍 Ubicación: Calle Mayor 123, Madrid, España"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📧 Email: contacto@agenciasuarez.com"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📞 Teléfono: +34 912 345 678"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="🏪 Locales: 2 (AGS0001, AGS0002)"
-                                           FontSize="13"
-                                           Foreground="#595959"
-                                           Margin="0,4,0,0"/>
-                                
-                                <!-- Badge estado -->
-                                <Border Background="#e8f5e9"
-                                        CornerRadius="12"
-                                        Padding="8,4"
-                                        HorizontalAlignment="Left"
-                                        Margin="0,6,0,0">
-                                    <TextBlock Text="✓ Activo"
-                                               FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="#4caf50"/>
-                                </Border>
-                            </StackPanel>
-
-                            <!-- Botones de acción -->
-                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
-                                <Button Classes="primary"
-                                        Content="✏️ Editar"
-                                        Width="100"/>
-                                <Button Classes="outline"
-                                        Content="🗑️ Eliminar"
-                                        Width="100"/>
-                            </StackPanel>
-
-                        </Grid>
-                    </Border>
-
-                    <!-- Card de comercio - Ejemplo 2 -->
-                    <Border Classes="card">
-                        <Grid ColumnDefinitions="*,Auto">
-                            
-                            <StackPanel Grid.Column="0" Spacing="6">
-                                <TextBlock Text="Latin Servicios"
-                                           FontSize="18"
-                                           FontWeight="Bold"
-                                           Foreground="#0b5394"/>
-                                <TextBlock Text="📍 Ubicación: Av. Libertador 456, Buenos Aires, Argentina"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📧 Email: info@latinservicios.com"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="📞 Teléfono: +54 11 4567 8901"
-                                           FontSize="13"
-                                           Foreground="#595959"/>
-                                <TextBlock Text="🏪 Locales: 1 (LSE0001)"
-                                           FontSize="13"
-                                           Foreground="#595959"
-                                           Margin="0,4,0,0"/>
-                                
-                                <Border Background="#e8f5e9"
-                                        CornerRadius="12"
-                                        Padding="8,4"
-                                        HorizontalAlignment="Left"
-                                        Margin="0,6,0,0">
-                                    <TextBlock Text="✓ Activo"
-                                               FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="#4caf50"/>
-                                </Border>
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
-                                <Button Classes="primary"
-                                        Content="✏️ Editar"
-                                        Width="100"/>
-                                <Button Classes="outline"
-                                        Content="🗑️ Eliminar"
-                                        Width="100"/>
-                            </StackPanel>
-
-                        </Grid>
-                    </Border>
-
-                    <!-- Mensaje cuando no hay resultados -->
-                    <!-- <Border Classes="card" Padding="40">
-                        <TextBlock Text="No se encontraron comercios"
-                                   FontSize="16"
-                                   Foreground="#999"
-                                   TextAlignment="Center"
-                                   HorizontalAlignment="Center"/>
-                    </Border> -->
-
+                    
+                    <!-- Activos -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Activos" 
+                                   FontSize="11" 
+                                   Foreground="#e0e0e0"/>
+                        <TextBlock Text="{Binding ComerciosActivos}" 
+                                   FontSize="22" 
+                                   FontWeight="Bold" 
+                                   Foreground="#28a745"/>
+                    </StackPanel>
+                    
+                    <!-- Inactivos -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Inactivos" 
+                                   FontSize="11" 
+                                   Foreground="#e0e0e0"/>
+                        <TextBlock Text="{Binding ComerciosInactivos}" 
+                                   FontSize="22" 
+                                   FontWeight="Bold" 
+                                   Foreground="#dc3545"/>
+                    </StackPanel>
+                    
+                    <!-- Total Locales -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Total Locales" 
+                                   FontSize="11" 
+                                   Foreground="#e0e0e0"/>
+                        <TextBlock Text="{Binding TotalLocales}" 
+                                   FontSize="22" 
+                                   FontWeight="Bold" 
+                                   Foreground="#ffd966"/>
+                    </StackPanel>
+                    
                 </StackPanel>
-            </ScrollViewer>
+                
+                <!-- Botón Nuevo Comercio -->
+                <Button Grid.Column="1"
+                        Command="{Binding NuevoComercioCommand}"
+                        Background="#ffd966"
+                        Foreground="#0b5394"
+                        Padding="20,10"
+                        CornerRadius="6"
+                        FontWeight="SemiBold"
+                        FontSize="14"
+                        Cursor="Hand">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="+" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Text="Nuevo Comercio" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <Button.Styles>
+                        <Style Selector="Button:pointerover">
+                            <Setter Property="Background" Value="#f5c94b"/>
+                        </Style>
+                    </Button.Styles>
+                </Button>
+                
+            </Grid>
+        </Border>
 
-        </Grid>
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- CONTENIDO PRINCIPAL -->
+        <!-- ═══════════════════════════════════════════ -->
+        <ScrollViewer Grid.Row="1" Padding="20,0,20,20">
+            <StackPanel Spacing="15">
+                
+                <!-- ═══════════════════════════════════════════ -->
+                <!-- MENSAJE DE ÉXITO -->
+                <!-- ═══════════════════════════════════════════ -->
+                <Border IsVisible="{Binding MostrarMensajeExito}"
+                        Background="#d4edda"
+                        BorderBrush="#28a745"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="15">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="✓" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   Foreground="#28a745" 
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding MensajeExito}" 
+                                   Foreground="#155724" 
+                                   FontWeight="Medium"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- ═══════════════════════════════════════════ -->
+                <!-- FORMULARIO DE CREACIÓN/EDICIÓN -->
+                <!-- ═══════════════════════════════════════════ -->
+                <Border IsVisible="{Binding MostrarFormulario}"
+                        Background="White"
+                        CornerRadius="8"
+                        Padding="25"
+                        BoxShadow="0 2 10 0 #15000000">
+                    
+                    <StackPanel Spacing="20">
+                        
+                        <!-- Header del formulario -->
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding TituloFormulario}" 
+                                       FontSize="20" 
+                                       FontWeight="Bold" 
+                                       Foreground="#0b5394"/>
+                            
+                            <Button Grid.Column="1"
+                                    Command="{Binding CancelarFormularioCommand}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Content="✕"
+                                    FontSize="20"
+                                    Foreground="#666"
+                                    Padding="8"
+                                    Cursor="Hand"/>
+                        </Grid>
+
+                        <Separator Background="#e0e0e0" Height="1"/>
+
+                        <!-- ═══════════════════════════════════════════ -->
+                        <!-- DATOS BÁSICOS DEL COMERCIO -->
+                        <!-- ═══════════════════════════════════════════ -->
+                        <StackPanel Spacing="18">
+                            
+                            <TextBlock Text="Datos Básicos" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#0b5394"/>
+
+                            <!-- Nombre Comercio y Razón Social -->
+                            <Grid ColumnDefinitions="*,15,*">
+                                
+                                <!-- Nombre Comercio -->
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Nombre del Comercio *" 
+                                               FontSize="13" 
+                                               Foreground="#555"/>
+                                    <TextBox Text="{Binding NombreComercio}" 
+                                             Watermark="Ej: Allva Centro"
+                                             FontSize="14"
+                                             Padding="10"
+                                             BorderBrush="#d0d0d0"
+                                             BorderThickness="1"
+                                             CornerRadius="4"/>
+                                    <TextBlock Text="{Binding ErrorNombreComercio}" 
+                                               Foreground="#dc3545" 
+                                               FontSize="11"
+                                               IsVisible="{Binding ErrorNombreComercio, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                                </StackPanel>
+                                
+                                <!-- Razón Social -->
+                                <StackPanel Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Razón Social / Nombre SRL" 
+                                               FontSize="13" 
+                                               Foreground="#555"/>
+                                    <TextBox Text="{Binding NombreSrl}" 
+                                             Watermark="Ej: Allva Centro SRL"
+                                             FontSize="14"
+                                             Padding="10"
+                                             BorderBrush="#d0d0d0"
+                                             BorderThickness="1"
+                                             CornerRadius="4"/>
+                                </StackPanel>
+                                
+                            </Grid>
+
+                            <!-- Dirección Central -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Dirección Central *" 
+                                           FontSize="13" 
+                                           Foreground="#555"/>
+                                <TextBox Text="{Binding DireccionCentral}" 
+                                         Watermark="Dirección completa de la sede central"
+                                         FontSize="14"
+                                         Padding="10"
+                                         BorderBrush="#d0d0d0"
+                                         BorderThickness="1"
+                                         CornerRadius="4"/>
+                            </StackPanel>
+
+                            <!-- País, Teléfono y Email -->
+                            <Grid ColumnDefinitions="*,15,*,15,*">
+                                
+                                <!-- País -->
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="País" 
+                                               FontSize="13" 
+                                               Foreground="#555"/>
+                                    <TextBox Text="{Binding Pais}" 
+                                             Watermark="Ej: España"
+                                             FontSize="14"
+                                             Padding="10"
+                                             BorderBrush="#d0d0d0"
+                                             BorderThickness="1"
+                                             CornerRadius="4"/>
+                                </StackPanel>
+                                
+                                <!-- Teléfono -->
+                                <StackPanel Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Teléfono" 
+                                               FontSize="13" 
+                                               Foreground="#555"/>
+                                    <TextBox Text="{Binding NumeroContacto}" 
+                                             Watermark="+34 91 123 4567"
+                                             FontSize="14"
+                                             Padding="10"
+                                             BorderBrush="#d0d0d0"
+                                             BorderThickness="1"
+                                             CornerRadius="4"/>
+                                </StackPanel>
+                                
+                                <!-- Email -->
+                                <StackPanel Grid.Column="4" Spacing="6">
+                                    <TextBlock Text="Email de Contacto *" 
+                                               FontSize="13" 
+                                               Foreground="#555"/>
+                                    <TextBox Text="{Binding MailContacto}" 
+                                             Watermark="contacto@comercio.com"
+                                             FontSize="14"
+                                             Padding="10"
+                                             BorderBrush="#d0d0d0"
+                                             BorderThickness="1"
+                                             CornerRadius="4"/>
+                                    <TextBlock Text="{Binding ErrorMailContacto}" 
+                                               Foreground="#dc3545" 
+                                               FontSize="11"
+                                               IsVisible="{Binding ErrorMailContacto, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                                </StackPanel>
+                                
+                            </Grid>
+
+                            <!-- Observaciones -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Observaciones" 
+                                           FontSize="13" 
+                                           Foreground="#555"/>
+                                <TextBox Text="{Binding Observaciones}" 
+                                         Watermark="Notas adicionales sobre el comercio"
+                                         FontSize="14"
+                                         Padding="10"
+                                         BorderBrush="#d0d0d0"
+                                         BorderThickness="1"
+                                         CornerRadius="4"
+                                         AcceptsReturn="True"
+                                         Height="80"
+                                         TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                        <Separator Background="#e0e0e0" Height="1"/>
+
+                        <!-- ═══════════════════════════════════════════ -->
+                        <!-- PERMISOS DE MÓDULOS -->
+                        <!-- ═══════════════════════════════════════════ -->
+                        <StackPanel Spacing="12">
+                            
+                            <TextBlock Text="Permisos de Módulos *" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#0b5394"/>
+                            
+                            <TextBlock Text="Selecciona los módulos que estarán disponibles para este comercio" 
+                                       FontSize="12" 
+                                       Foreground="#777"/>
+
+                            <!-- Grid de checkboxes de módulos -->
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                                
+                                <!-- Módulo Divisas -->
+                                <CheckBox Grid.Column="0" Grid.Row="0"
+                                          IsChecked="{Binding ModuloDivisas}"
+                                          Margin="0,0,0,10">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="💱" FontSize="16"/>
+                                        <TextBlock Text="Módulo Divisas" FontSize="14"/>
+                                    </StackPanel>
+                                </CheckBox>
+                                
+                                <!-- Módulo Pack Alimentos -->
+                                <CheckBox Grid.Column="1" Grid.Row="0"
+                                          IsChecked="{Binding ModuloPackAlimentos}"
+                                          Margin="0,0,0,10">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="🍽️" FontSize="16"/>
+                                        <TextBlock Text="Pack de Alimentos" FontSize="14"/>
+                                    </StackPanel>
+                                </CheckBox>
+                                
+                                <!-- Módulo Billetes de Avión -->
+                                <CheckBox Grid.Column="0" Grid.Row="1"
+                                          IsChecked="{Binding ModuloBilletesAvion}">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="✈️" FontSize="16"/>
+                                        <TextBlock Text="Billetes de Avión" FontSize="14"/>
+                                    </StackPanel>
+                                </CheckBox>
+                                
+                                <!-- Módulo Pack Viajes -->
+                                <CheckBox Grid.Column="1" Grid.Row="1"
+                                          IsChecked="{Binding ModuloPackViajes}">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="🏖️" FontSize="16"/>
+                                        <TextBlock Text="Pack de Viajes" FontSize="14"/>
+                                    </StackPanel>
+                                </CheckBox>
+                                
+                            </Grid>
+
+                        </StackPanel>
+
+                        <Separator Background="#e0e0e0" Height="1"/>
+
+                        <!-- ═══════════════════════════════════════════ -->
+                        <!-- CONFIGURACIÓN DE DIVISAS -->
+                        <!-- ═══════════════════════════════════════════ -->
+                        <StackPanel Spacing="12" IsVisible="{Binding ModuloDivisas}">
+                            
+                            <TextBlock Text="Configuración de Divisas" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#0b5394"/>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Porcentaje de Comisión (%)" 
+                                           FontSize="13" 
+                                           Foreground="#555"/>
+                                <NumericUpDown Value="{Binding PorcentajeComisionDivisas}"
+                                               Minimum="0"
+                                               Maximum="100"
+                                               Increment="0.1"
+                                               FormatString="F2"
+                                               Width="150"
+                                               HorizontalAlignment="Left"/>
+                                <TextBlock Text="Este porcentaje es la comisión que cobra el dueño de la app" 
+                                           FontSize="11" 
+                                           Foreground="#999"/>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                        <Separator Background="#e0e0e0" Height="1"/>
+
+                        <!-- ═══════════════════════════════════════════ -->
+                        <!-- GESTIÓN DE LOCALES -->
+                        <!-- ═══════════════════════════════════════════ -->
+                        <StackPanel Spacing="12">
+                            
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0"
+                                           Text="Locales del Comercio" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold" 
+                                           Foreground="#0b5394"/>
+                                
+                                <Button Grid.Column="1"
+                                        Command="{Binding AgregarLocalCommand}"
+                                        Background="#ffd966"
+                                        Foreground="#0b5394"
+                                        Padding="12,6"
+                                        CornerRadius="4"
+                                        FontSize="13"
+                                        Cursor="Hand">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <TextBlock Text="+" FontWeight="Bold"/>
+                                        <TextBlock Text="Agregar Local"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+
+                            <!-- Lista de locales -->
+                            <ItemsControl ItemsSource="{Binding LocalesFormulario}"
+                                          IsVisible="{Binding MostrarPanelLocales}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#f8f9fa"
+                                                BorderBrush="#d0d0d0"
+                                                BorderThickness="1"
+                                                CornerRadius="6"
+                                                Padding="15"
+                                                Margin="0,0,0,10">
+                                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                                
+                                                <!-- Número -->
+                                                <Border Grid.Column="0"
+                                                        Background="#0b5394"
+                                                        CornerRadius="4"
+                                                        Padding="10,8"
+                                                        Margin="0,0,15,0"
+                                                        VerticalAlignment="Top">
+                                                    <TextBlock Text="{Binding IdLocal}" 
+                                                               Foreground="White" 
+                                                               FontWeight="Bold"
+                                                               FontSize="14"/>
+                                                </Border>
+                                                
+                                                <!-- Datos del local -->
+                                                <StackPanel Grid.Column="1" Spacing="8">
+                                                    
+                                                    <!-- Código y Nombre -->
+                                                    <Grid ColumnDefinitions="*,15,*">
+                                                        <StackPanel Grid.Column="0" Spacing="4">
+                                                            <TextBlock Text="Código de Local" 
+                                                                       FontSize="11" 
+                                                                       Foreground="#777"/>
+                                                            <TextBox Text="{Binding CodigoLocal}" 
+                                                                     FontSize="13"
+                                                                     IsReadOnly="True"
+                                                                     Background="#e9ecef"/>
+                                                        </StackPanel>
+                                                        
+                                                        <StackPanel Grid.Column="2" Spacing="4">
+                                                            <TextBlock Text="Nombre del Local" 
+                                                                       FontSize="11" 
+                                                                       Foreground="#777"/>
+                                                            <TextBox Text="{Binding NombreLocal}" 
+                                                                     FontSize="13"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    
+                                                    <!-- Dirección -->
+                                                    <StackPanel Spacing="4">
+                                                        <TextBlock Text="Dirección" 
+                                                                   FontSize="11" 
+                                                                   Foreground="#777"/>
+                                                        <TextBox Text="{Binding Direccion}" 
+                                                                 FontSize="13"
+                                                                 Watermark="Calle, número, piso, etc."/>
+                                                    </StackPanel>
+                                                    
+                                                </StackPanel>
+                                                
+                                                <!-- Botón eliminar -->
+                                                <Button Grid.Column="2"
+                                                        Command="{Binding $parent[ItemsControl].((vm:ManageComerciosViewModel)DataContext).EliminarLocalCommand}"
+                                                        CommandParameter="{Binding}"
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Foreground="#dc3545"
+                                                        Padding="8"
+                                                        Cursor="Hand"
+                                                        VerticalAlignment="Top">
+                                                    <TextBlock Text="🗑️" FontSize="16"/>
+                                                </Button>
+                                                
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <TextBlock Text="No hay locales agregados. Haz clic en '+ Agregar Local' para comenzar." 
+                                       FontSize="13" 
+                                       Foreground="#999"
+                                       FontStyle="Italic"
+                                       IsVisible="{Binding !MostrarPanelLocales}"/>
+
+                        </StackPanel>
+
+                        <Separator Background="#e0e0e0" Height="1"/>
+
+                        <!-- ═══════════════════════════════════════════ -->
+                        <!-- ESTADO Y BOTONES DE ACCIÓN -->
+                        <!-- ═══════════════════════════════════════════ -->
+                        <Grid ColumnDefinitions="Auto,*,Auto,15,Auto">
+                            
+                            <!-- CheckBox Estado Activo -->
+                            <CheckBox Grid.Column="0"
+                                      IsChecked="{Binding Activo}">
+                                <TextBlock Text="Comercio Activo" FontSize="14"/>
+                            </CheckBox>
+                            
+                            <!-- Botón Cancelar -->
+                            <Button Grid.Column="2"
+                                    Command="{Binding CancelarFormularioCommand}"
+                                    Background="#e0e0e0"
+                                    Foreground="#555"
+                                    Padding="25,10"
+                                    CornerRadius="6"
+                                    FontSize="14"
+                                    Cursor="Hand">
+                                <TextBlock Text="Cancelar"/>
+                            </Button>
+                            
+                            <!-- Botón Guardar -->
+                            <Button Grid.Column="4"
+                                    Command="{Binding GuardarComercioCommand}"
+                                    Background="#0b5394"
+                                    Foreground="White"
+                                    Padding="30,10"
+                                    CornerRadius="6"
+                                    FontWeight="SemiBold"
+                                    FontSize="14"
+                                    Cursor="Hand">
+                                <TextBlock Text="{Binding ModoEdicion, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=True, 
+                                                          FallbackValue='Guardar', 
+                                                          TargetNullValue='Guardar'}"/>
+                            </Button>
+                            
+                        </Grid>
+
+                    </StackPanel>
+                    
+                </Border>
+
+                <!-- ═══════════════════════════════════════════ -->
+                <!-- LISTA DE COMERCIOS -->
+                <!-- ═══════════════════════════════════════════ -->
+                <ItemsControl ItemsSource="{Binding Comercios}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="m:ComercioModel">
+                            
+                            <Border Background="White"
+                                    CornerRadius="8"
+                                    Padding="20"
+                                    Margin="0,0,0,15"
+                                    BoxShadow="0 2 8 0 #10000000">
+                                
+                                <Grid ColumnDefinitions="*,Auto">
+                                    
+                                    <!-- Información del comercio -->
+                                    <StackPanel Grid.Column="0" Spacing="12">
+                                        
+                                        <!-- Header con nombre y estado -->
+                                        <Grid ColumnDefinitions="*,Auto,Auto">
+                                            
+                                            <StackPanel Grid.Column="0" Spacing="4">
+                                                <TextBlock Text="{Binding NombreComercio}" 
+                                                           FontSize="18" 
+                                                           FontWeight="Bold" 
+                                                           Foreground="#0b5394"/>
+                                                <TextBlock Text="{Binding NombreSrl}" 
+                                                           FontSize="13" 
+                                                           Foreground="#666"/>
+                                            </StackPanel>
+                                            
+                                            <!-- Badge de estado -->
+                                            <Border Grid.Column="1"
+                                                    Background="{Binding EstadoColor}"
+                                                    CornerRadius="12"
+                                                    Padding="12,4"
+                                                    Margin="0,0,10,0">
+                                                <TextBlock Text="{Binding EstadoTexto}" 
+                                                           Foreground="White" 
+                                                           FontSize="11" 
+                                                           FontWeight="SemiBold"/>
+                                            </Border>
+                                            
+                                        </Grid>
+
+                                        <!-- Dirección y contacto -->
+                                        <StackPanel Spacing="6">
+                                            <TextBlock FontSize="13" Foreground="#555">
+                                                <Run Text="📍"/>
+                                                <Run Text="{Binding DireccionCentral}"/>
+                                                <Run Text="•"/>
+                                                <Run Text="{Binding Pais}"/>
+                                            </TextBlock>
+                                            
+                                            <TextBlock FontSize="13" Foreground="#555">
+                                                <Run Text="📧"/>
+                                                <Run Text="{Binding MailContacto}"/>
+                                                <Run Text="•"/>
+                                                <Run Text="📞"/>
+                                                <Run Text="{Binding NumeroContacto}"/>
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                        <!-- Módulos activos -->
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Text="Módulos Activos:" 
+                                                       FontSize="12" 
+                                                       FontWeight="SemiBold" 
+                                                       Foreground="#777"/>
+                                            <TextBlock Text="{Binding PermisosResumen}" 
+                                                       FontSize="13" 
+                                                       Foreground="#0b5394"/>
+                                        </StackPanel>
+
+                                        <!-- Estadísticas de locales y usuarios -->
+                                        <Grid ColumnDefinitions="Auto,30,Auto">
+                                            <Border Grid.Column="0"
+                                                    Background="#f8f9fa"
+                                                    BorderBrush="#d0d0d0"
+                                                    BorderThickness="1"
+                                                    CornerRadius="6"
+                                                    Padding="12,8">
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <TextBlock Text="🏪" FontSize="14"/>
+                                                    <TextBlock Text="{Binding CantidadLocales}" 
+                                                               FontWeight="Bold" 
+                                                               FontSize="14"/>
+                                                    <TextBlock Text="Locales" FontSize="13" Foreground="#666"/>
+                                                </StackPanel>
+                                            </Border>
+                                            
+                                            <Border Grid.Column="2"
+                                                    Background="#f8f9fa"
+                                                    BorderBrush="#d0d0d0"
+                                                    BorderThickness="1"
+                                                    CornerRadius="6"
+                                                    Padding="12,8">
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <TextBlock Text="👥" FontSize="14"/>
+                                                    <TextBlock Text="{Binding TotalUsuarios}" 
+                                                               FontWeight="Bold" 
+                                                               FontSize="14"/>
+                                                    <TextBlock Text="Usuarios" FontSize="13" Foreground="#666"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+
+                                    </StackPanel>
+
+                                    <!-- Botones de acción -->
+                                    <StackPanel Grid.Column="1" 
+                                                Spacing="8"
+                                                VerticalAlignment="Center"
+                                                Margin="20,0,0,0">
+                                        
+                                        <!-- Botón Editar -->
+                                        <Button Command="{Binding $parent[ItemsControl].((vm:ManageComerciosViewModel)DataContext).EditarComercioCommand}"
+                                                CommandParameter="{Binding}"
+                                                Background="#ffd966"
+                                                Foreground="#0b5394"
+                                                Padding="15,8"
+                                                CornerRadius="6"
+                                                FontSize="13"
+                                                FontWeight="Medium"
+                                                Cursor="Hand"
+                                                Width="120">
+                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                <TextBlock Text="✏️" FontSize="14"/>
+                                                <TextBlock Text="Editar"/>
+                                            </StackPanel>
+                                        </Button>
+                                        
+                                        <!-- Botón Cambiar Estado -->
+                                        <Button Command="{Binding $parent[ItemsControl].((vm:ManageComerciosViewModel)DataContext).CambiarEstadoComercioCommand}"
+                                                CommandParameter="{Binding}"
+                                                Background="{Binding Activo, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=True}"
+                                                Foreground="White"
+                                                Padding="15,8"
+                                                CornerRadius="6"
+                                                FontSize="13"
+                                                Cursor="Hand"
+                                                Width="120">
+                                            <TextBlock Text="{Binding Activo, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=True}"/>
+                                        </Button>
+                                        
+                                        <!-- Botón Eliminar -->
+                                        <Button Command="{Binding $parent[ItemsControl].((vm:ManageComerciosViewModel)DataContext).EliminarComercioCommand}"
+                                                CommandParameter="{Binding}"
+                                                Background="#dc3545"
+                                                Foreground="White"
+                                                Padding="15,8"
+                                                CornerRadius="6"
+                                                FontSize="13"
+                                                Cursor="Hand"
+                                                Width="120"
+                                                IsEnabled="{Binding TotalUsuarios, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                <TextBlock Text="🗑️" FontSize="14"/>
+                                                <TextBlock Text="Eliminar"/>
+                                            </StackPanel>
+                                        </Button>
+                                        
+                                    </StackPanel>
+                                    
+                                </Grid>
+                                
+                            </Border>
+                            
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 
 </UserControl>
