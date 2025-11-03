@@ -1,0 +1,280 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             x:Class="Allva.Desktop.Views.Admin.ManageUsuariosView"
+             x:DataType="vm:ManageUsuariosViewModel">
+
+    <!-- ============================================ -->
+    <!-- GESTIÓN DE USUARIOS -->
+    <!-- Vista con lista de usuarios y filtros -->
+    <!-- ============================================ -->
+
+    <Grid>
+        <!-- Fondo -->
+        <Border Background="White"
+                CornerRadius="12"
+                BoxShadow="0 2 12 0 #20000000"/>
+
+        <!-- Contenido principal -->
+        <Grid RowDefinitions="Auto,*">
+            
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- HEADER con filtros y botón nuevo -->
+            <!-- ═══════════════════════════════════════════ -->
+            <Border Grid.Row="0"
+                    Background="#FFD966"
+                    Padding="25,20"
+                    CornerRadius="12,12,0,0">
+                <Grid ColumnDefinitions="*,Auto">
+                    
+                    <!-- Filtros -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                        
+                        <TextBox Classes="allva"
+                                 Watermark="🔍 Buscar por nombre..."
+                                 Width="200"
+                                 VerticalAlignment="Center"/>
+                        
+                        <TextBox Classes="allva"
+                                 Watermark="🏢 Filtrar por comercio..."
+                                 Width="180"
+                                 VerticalAlignment="Center"/>
+                        
+                        <TextBox Classes="allva"
+                                 Watermark="🏪 Filtrar por local..."
+                                 Width="180"
+                                 VerticalAlignment="Center"/>
+                        
+                        <Button Classes="primary"
+                                Content="Aplicar filtros"
+                                VerticalAlignment="Center"/>
+                        
+                        <Button Classes="outline"
+                                Content="Limpiar"
+                                VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Botón nuevo usuario -->
+                    <Button Grid.Column="1"
+                            Classes="secondary"
+                            Content="+ Nuevo Usuario"
+                            FontSize="15"
+                            Padding="16,10"
+                            VerticalAlignment="Center"/>
+
+                </Grid>
+            </Border>
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- LISTA DE USUARIOS -->
+            <!-- ═══════════════════════════════════════════ -->
+            <ScrollViewer Grid.Row="1" Padding="25">
+                <StackPanel Spacing="12">
+
+                    <!-- Card de usuario - Ejemplo 1 -->
+                    <Border Classes="card">
+                        <Grid ColumnDefinitions="*,Auto">
+                            
+                            <!-- Información del usuario -->
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Text="ANA_GÓMEZ"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Foreground="#0b5394"/>
+                                <TextBlock Text="👤 Nombre: Ana Gómez"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📞 Teléfono: 600123456"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📧 Email: ana@gmail.com"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="🏢 Comercio: Agencia Suárez"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="🏪 Locales: AGS0001"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                
+                                <!-- Badge tipo de usuario -->
+                                <Border Background="#fff3cd"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,6,0,0">
+                                    <TextBlock Text="🏷️ Regular"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="#856404"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Botones de acción -->
+                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                                <Button Classes="primary"
+                                        Content="✏️ Editar"
+                                        Width="100"/>
+                                <Button Classes="outline"
+                                        Content="🗑️ Eliminar"
+                                        Width="100"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+
+                    <!-- Card de usuario - Ejemplo 2 -->
+                    <Border Classes="card">
+                        <Grid ColumnDefinitions="*,Auto">
+                            
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Text="LUIS_PÉREZ"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Foreground="#0b5394"/>
+                                <TextBlock Text="👤 Nombre: Luis Pérez"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📞 Teléfono: 600654321"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📧 Email: luis@gmail.com"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="🏢 Comercio: Agencia Suárez"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="🏪 Locales: AGS0002"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                
+                                <Border Background="#fff3cd"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,6,0,0">
+                                    <TextBlock Text="🏷️ Regular"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="#856404"/>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                                <Button Classes="primary"
+                                        Content="✏️ Editar"
+                                        Width="100"/>
+                                <Button Classes="outline"
+                                        Content="🗑️ Eliminar"
+                                        Width="100"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+
+                    <!-- Card de usuario - Ejemplo 3 (Flotante) -->
+                    <Border Classes="card">
+                        <Grid ColumnDefinitions="*,Auto">
+                            
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Text="CARLOS_RAMÍREZ"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Foreground="#0b5394"/>
+                                <TextBlock Text="👤 Nombre: Carlos Ramírez"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📞 Teléfono: 600456789"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📧 Email: carlos@gmail.com"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="🏢 Comercio: Agencia Suárez"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="🏪 Locales: AGS0001, AGS0002"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                
+                                <!-- Badge Flotante -->
+                                <Border Background="#e3f2fd"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,6,0,0">
+                                    <TextBlock Text="🏷️ Flotante"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="#0b5394"/>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                                <Button Classes="primary"
+                                        Content="✏️ Editar"
+                                        Width="100"/>
+                                <Button Classes="outline"
+                                        Content="🗑️ Eliminar"
+                                        Width="100"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+
+                    <!-- Card de usuario - Ejemplo 4 -->
+                    <Border Classes="card">
+                        <Grid ColumnDefinitions="*,Auto">
+                            
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Text="MARTA_LOPEZ"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Foreground="#0b5394"/>
+                                <TextBlock Text="👤 Nombre: Marta Lopez"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📞 Teléfono: 600987654"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📧 Email: marta@gmail.com"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="🏢 Comercio: Latin Servicios"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="🏪 Locales: LSE0001"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                
+                                <Border Background="#fff3cd"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,6,0,0">
+                                    <TextBlock Text="🏷️ Regular"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="#856404"/>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                                <Button Classes="primary"
+                                        Content="✏️ Editar"
+                                        Width="100"/>
+                                <Button Classes="outline"
+                                        Content="🗑️ Eliminar"
+                                        Width="100"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+
+        </Grid>
+    </Grid>
+
+</UserControl>

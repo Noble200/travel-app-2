@@ -1,0 +1,212 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             x:Class="Allva.Desktop.Views.Admin.AdminDashboardView"
+             x:DataType="vm:AdminDashboardViewModel">
+
+    <Design.DataContext>
+        <vm:AdminDashboardViewModel />
+    </Design.DataContext>
+
+    <!-- ============================================ -->
+    <!-- PANEL DE ADMINISTRACIÓN -->
+    <!-- Fondo amarillo con sidebar azul y contenido -->
+    <!-- ============================================ -->
+
+    <Grid>
+        <!-- Fondo amarillo general -->
+        <Border Background="#FFD966" />
+
+        <!-- Grid principal: Sidebar + Contenido -->
+        <Grid ColumnDefinitions="240,*">
+            
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- SIDEBAR (Menu lateral izquierdo) -->
+            <!-- ═══════════════════════════════════════════ -->
+            <Border Grid.Column="0" Classes="sidebar">
+                <StackPanel>
+                    
+                    <!-- Logo Allva -->
+                    <Border Padding="20" Margin="0,20,0,40">
+                        <Border Background="#FFD966"
+                                CornerRadius="12"
+                                Padding="16,8"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="Allva"
+                                       FontSize="32"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       TextAlignment="Center"/>
+                        </Border>
+                    </Border>
+
+                    <!-- Título del panel -->
+                    <TextBlock Text="Panel de Administración"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="White"
+                               TextAlignment="Center"
+                               Margin="0,0,0,20"
+                               Padding="10"/>
+
+                    <!-- Nombre del administrador -->
+                    <Border Background="#20FFFFFF"
+                            Padding="12"
+                            Margin="15,0,15,30"
+                            CornerRadius="8">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="👤"
+                                       FontSize="18"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding AdminName}"
+                                       FontSize="14"
+                                       FontWeight="Medium"
+                                       Foreground="White"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Menú de navegación -->
+                    <StackPanel Spacing="0">
+                        
+                        <!-- Gestión de Comercios -->
+                        <Button Classes="menu-item"
+                                Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='comercios'}"
+                                Command="{Binding NavigateToModuleCommand}"
+                                CommandParameter="comercios">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <TextBlock Text="🏢" FontSize="16" VerticalAlignment="Center"/>
+                                <TextBlock Text="Gestión de Comercios" FontSize="14" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Gestión de Usuarios -->
+                        <Button Classes="menu-item"
+                                Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='usuarios'}"
+                                Command="{Binding NavigateToModuleCommand}"
+                                CommandParameter="usuarios">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <TextBlock Text="👥" FontSize="16" VerticalAlignment="Center"/>
+                                <TextBlock Text="Gestión de Usuarios" FontSize="14" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+
+                    <!-- Espaciador -->
+                    <Border Height="1" Margin="15,30,15,30" Background="#40FFFFFF"/>
+
+                    <!-- Botón Cerrar Sesión -->
+                    <Button Classes="menu-item"
+                            Command="{Binding LogoutCommand}"
+                            Margin="0,10,0,20">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBlock Text="🚪" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="Cerrar Sesión" FontSize="14" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+            </Border>
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- CONTENIDO PRINCIPAL (Área de trabajo) -->
+            <!-- ═══════════════════════════════════════════ -->
+            <Grid Grid.Column="1" Margin="30">
+                
+                <!-- Header superior -->
+                <StackPanel>
+                    
+                    <!-- Panel blanco con logo y título -->
+                    <Border Background="White"
+                            CornerRadius="15"
+                            Padding="25,20"
+                            BoxShadow="0 2 12 0 #20000000"
+                            Margin="0,0,0,25">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            
+                            <!-- Logo pequeño -->
+                            <Border Grid.Column="0"
+                                    Background="#FFD966"
+                                    CornerRadius="10"
+                                    Padding="16,8"
+                                    Margin="0,0,20,0">
+                                <TextBlock Text="Allva"
+                                           FontSize="24"
+                                           FontWeight="Bold"
+                                           Foreground="#0b5394"/>
+                            </Border>
+
+                            <!-- Título del módulo actual -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding SelectedModuleTitle}"
+                                           Classes="page-title"
+                                           Margin="0,0,0,4"/>
+                                <TextBlock Text="Panel de administración del sistema"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                            </StackPanel>
+
+                            <!-- Iconos de usuario y notificaciones -->
+                            <StackPanel Grid.Column="2" 
+                                        Orientation="Horizontal" 
+                                        Spacing="12"
+                                        VerticalAlignment="Center">
+                                
+                                <!-- Notificaciones -->
+                                <Border Background="#f3f3f3"
+                                        Width="40"
+                                        Height="40"
+                                        CornerRadius="20"
+                                        Cursor="Hand">
+                                    <TextBlock Text="🔔"
+                                               FontSize="20"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <!-- Perfil -->
+                                <Border Background="#f3f3f3"
+                                        Width="40"
+                                        Height="40"
+                                        CornerRadius="20"
+                                        Cursor="Hand">
+                                    <TextBlock Text="👤"
+                                               FontSize="20"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <!-- Menú hamburguesa -->
+                                <Border Background="#0b5394"
+                                        Width="40"
+                                        Height="40"
+                                        CornerRadius="6"
+                                        Cursor="Hand">
+                                    <TextBlock Text="☰"
+                                               FontSize="24"
+                                               Foreground="White"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+
+                    <!-- Área de contenido dinámico -->
+                    <ContentControl Content="{Binding CurrentView}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"/>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Grid>
+    </Grid>
+
+</UserControl>

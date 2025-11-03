@@ -1,0 +1,181 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             x:Class="Allva.Desktop.Views.Admin.ManageComerciosView"
+             x:DataType="vm:ManageComerciosViewModel">
+
+    <!-- ============================================ -->
+    <!-- GESTIÓN DE COMERCIOS -->
+    <!-- Vista con lista y formulario lateral -->
+    <!-- ============================================ -->
+
+    <Grid>
+        <!-- Fondo -->
+        <Border Background="White"
+                CornerRadius="12"
+                BoxShadow="0 2 12 0 #20000000"/>
+
+        <!-- Contenido principal -->
+        <Grid RowDefinitions="Auto,*">
+            
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- HEADER con filtros y botón nuevo -->
+            <!-- ═══════════════════════════════════════════ -->
+            <Border Grid.Row="0"
+                    Background="#FFD966"
+                    Padding="25,20"
+                    CornerRadius="12,12,0,0">
+                <Grid ColumnDefinitions="*,Auto">
+                    
+                    <!-- Filtros -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                        
+                        <TextBox Classes="allva"
+                                 Watermark="🔍 Buscar por nombre..."
+                                 Width="200"
+                                 VerticalAlignment="Center"/>
+                        
+                        <TextBox Classes="allva"
+                                 Watermark="📍 Filtrar por país..."
+                                 Width="180"
+                                 VerticalAlignment="Center"/>
+                        
+                        <Button Classes="primary"
+                                Content="Aplicar filtros"
+                                VerticalAlignment="Center"/>
+                        
+                        <Button Classes="outline"
+                                Content="Limpiar"
+                                VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Botón nuevo comercio -->
+                    <Button Grid.Column="1"
+                            Classes="secondary"
+                            Content="+ Nuevo Comercio"
+                            FontSize="15"
+                            Padding="16,10"
+                            VerticalAlignment="Center"/>
+
+                </Grid>
+            </Border>
+
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- LISTA DE COMERCIOS -->
+            <!-- ═══════════════════════════════════════════ -->
+            <ScrollViewer Grid.Row="1" Padding="25">
+                <StackPanel Spacing="12">
+
+                    <!-- Card de comercio - Ejemplo 1 -->
+                    <Border Classes="card">
+                        <Grid ColumnDefinitions="*,Auto">
+                            
+                            <!-- Información del comercio -->
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Text="Agencia Suárez"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Foreground="#0b5394"/>
+                                <TextBlock Text="📍 Ubicación: Calle Mayor 123, Madrid, España"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📧 Email: contacto@agenciasuarez.com"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📞 Teléfono: +34 912 345 678"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="🏪 Locales: 2 (AGS0001, AGS0002)"
+                                           FontSize="13"
+                                           Foreground="#595959"
+                                           Margin="0,4,0,0"/>
+                                
+                                <!-- Badge estado -->
+                                <Border Background="#e8f5e9"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,6,0,0">
+                                    <TextBlock Text="✓ Activo"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="#4caf50"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Botones de acción -->
+                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                                <Button Classes="primary"
+                                        Content="✏️ Editar"
+                                        Width="100"/>
+                                <Button Classes="outline"
+                                        Content="🗑️ Eliminar"
+                                        Width="100"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+
+                    <!-- Card de comercio - Ejemplo 2 -->
+                    <Border Classes="card">
+                        <Grid ColumnDefinitions="*,Auto">
+                            
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Text="Latin Servicios"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Foreground="#0b5394"/>
+                                <TextBlock Text="📍 Ubicación: Av. Libertador 456, Buenos Aires, Argentina"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📧 Email: info@latinservicios.com"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="📞 Teléfono: +54 11 4567 8901"
+                                           FontSize="13"
+                                           Foreground="#595959"/>
+                                <TextBlock Text="🏪 Locales: 1 (LSE0001)"
+                                           FontSize="13"
+                                           Foreground="#595959"
+                                           Margin="0,4,0,0"/>
+                                
+                                <Border Background="#e8f5e9"
+                                        CornerRadius="12"
+                                        Padding="8,4"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,6,0,0">
+                                    <TextBlock Text="✓ Activo"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="#4caf50"/>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                                <Button Classes="primary"
+                                        Content="✏️ Editar"
+                                        Width="100"/>
+                                <Button Classes="outline"
+                                        Content="🗑️ Eliminar"
+                                        Width="100"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+
+                    <!-- Mensaje cuando no hay resultados -->
+                    <!-- <Border Classes="card" Padding="40">
+                        <TextBlock Text="No se encontraron comercios"
+                                   FontSize="16"
+                                   Foreground="#999"
+                                   TextAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+                    </Border> -->
+
+                </StackPanel>
+            </ScrollViewer>
+
+        </Grid>
+    </Grid>
+
+</UserControl>
