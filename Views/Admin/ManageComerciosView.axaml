@@ -1,7 +1,11 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
              xmlns:m="using:Allva.Desktop.Models.Admin"
+             xmlns:local="using:Allva.Desktop.Models"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              x:Class="Allva.Desktop.Views.Admin.ManageComerciosView"
              x:DataType="vm:ManageComerciosViewModel">
 
@@ -315,7 +319,7 @@
                             <!-- Lista de locales -->
                             <ItemsControl ItemsSource="{Binding Locales}">
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="vm:LocalFormModel">
+                                    <DataTemplate DataType="local:LocalFormModel">
                                         
                                         <Border Background="#f8f9fa"
                                                 BorderBrush="#d0d0d0"

@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:m="using:Allva.Desktop.Models"
              xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              x:Class="Allva.Desktop.Views.Admin.ManageUsersView"
@@ -115,7 +116,7 @@
     <Grid>
         <!-- Panel de notificaciones -->
         <Border IsVisible="{Binding MostrarMensaje}"
-                Background="{Binding MensajeEsExito, Converter={x:Static converters:BoolToSuccessErrorColorConverter.Instance}}"
+                Background="#28a745"
                 CornerRadius="8"
                 Padding="16"
                 Margin="20"
@@ -155,7 +156,7 @@
                 <!-- ============================================ -->
                 <!-- ESTADÍSTICAS -->
                 <!-- ============================================ -->
-                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+                <Grid ColumnDefinitions="*,16,*,16,*">
                     <Border Grid.Column="0" Classes="stat-card">
                         <StackPanel Spacing="4">
                             <TextBlock Text="Total Usuarios"
@@ -168,7 +169,7 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Grid.Column="1" Classes="stat-card">
+                    <Border Grid.Column="2" Classes="stat-card">
                         <StackPanel Spacing="4">
                             <TextBlock Text="Usuarios Activos"
                                        FontSize="13"
@@ -180,7 +181,7 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Grid.Column="2" Classes="stat-card">
+                    <Border Grid.Column="4" Classes="stat-card">
                         <StackPanel Spacing="4">
                             <TextBlock Text="Usuarios Flotantes"
                                        FontSize="13"
@@ -239,7 +240,7 @@
                                         </Grid>
 
                                         <!-- Fila 2: Información de contacto y local -->
-                                        <Grid ColumnDefinitions="*,*" ColumnSpacing="24">
+                                        <Grid ColumnDefinitions="*,24,*">
                                             <StackPanel Grid.Column="0" Spacing="8">
                                                 <StackPanel Orientation="Horizontal" Spacing="6">
                                                     <TextBlock Text="📧" FontSize="14"/>
@@ -248,8 +249,7 @@
                                                                Foreground="#333333"/>
                                                 </StackPanel>
 
-                                                <StackPanel Orientation="Horizontal" Spacing="6"
-                                                            IsVisible="{Binding Telefono, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
                                                     <TextBlock Text="📞" FontSize="14"/>
                                                     <TextBlock Text="{Binding Telefono}"
                                                                FontSize="14"
@@ -257,7 +257,7 @@
                                                 </StackPanel>
                                             </StackPanel>
 
-                                            <StackPanel Grid.Column="1" Spacing="8">
+                                            <StackPanel Grid.Column="2" Spacing="8">
                                                 <StackPanel Orientation="Horizontal" Spacing="6">
                                                     <TextBlock Text="🏪" FontSize="14"/>
                                                     <TextBlock Text="{Binding NombreLocal}"
@@ -294,7 +294,7 @@
                                                 Command="{Binding $parent[ItemsControl].((vm:ManageUsersViewModel)DataContext).EditarUsuarioCommand}"
                                                 CommandParameter="{Binding}"/>
 
-                                        <Button Content="{Binding Activo, Converter={x:Static converters:BoolToUserStatusButtonTextConverter.Instance}}"
+                                        <Button Content="Cambiar Estado"
                                                 Classes="btn-secondary"
                                                 Command="{Binding $parent[ItemsControl].((vm:ManageUsersViewModel)DataContext).CambiarEstadoUsuarioCommand}"
                                                 CommandParameter="{Binding}"/>
@@ -343,7 +343,7 @@
                         <Separator Background="#E0E0E0"/>
 
                         <!-- Grid con campos del formulario -->
-                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="20" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="16">
+                        <Grid ColumnDefinitions="*,20,*,20,*" RowDefinitions="Auto,16,Auto,16,Auto,16,Auto">
 
                             <!-- Fila 1 -->
                             <StackPanel Grid.Column="0" Grid.Row="0">
@@ -353,14 +353,14 @@
                                          Watermark="Ej: EMP001"/>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1" Grid.Row="0">
+                            <StackPanel Grid.Column="2" Grid.Row="0">
                                 <TextBlock Classes="form-label" Text="Nombre *"/>
                                 <TextBox Classes="form-field"
                                          Text="{Binding FormNombre}"
                                          Watermark="Nombre"/>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="2" Grid.Row="0">
+                            <StackPanel Grid.Column="4" Grid.Row="0">
                                 <TextBlock Classes="form-label" Text="Apellidos *"/>
                                 <TextBox Classes="form-field"
                                          Text="{Binding FormApellidos}"
@@ -368,21 +368,21 @@
                             </StackPanel>
 
                             <!-- Fila 2 -->
-                            <StackPanel Grid.Column="0" Grid.Row="1">
+                            <StackPanel Grid.Column="0" Grid.Row="2">
                                 <TextBlock Classes="form-label" Text="Correo Electrónico *"/>
                                 <TextBox Classes="form-field"
                                          Text="{Binding FormCorreo}"
                                          Watermark="usuario@allva.com"/>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1" Grid.Row="1">
+                            <StackPanel Grid.Column="2" Grid.Row="2">
                                 <TextBlock Classes="form-label" Text="Teléfono"/>
                                 <TextBox Classes="form-field"
                                          Text="{Binding FormTelefono}"
                                          Watermark="+34 XXX XXX XXX"/>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="2" Grid.Row="1"
+                            <StackPanel Grid.Column="4" Grid.Row="2"
                                         IsVisible="{Binding !ModoEdicion}">
                                 <TextBlock Classes="form-label" Text="Contraseña *"/>
                                 <TextBox Classes="form-field"
@@ -392,7 +392,7 @@
                             </StackPanel>
 
                             <!-- Fila 3 -->
-                            <StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3">
+                            <StackPanel Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="5">
                                 <TextBlock Classes="form-label" Text="Observaciones"/>
                                 <TextBox Classes="form-field"
                                          Text="{Binding FormObservaciones}"
@@ -403,7 +403,7 @@
                             </StackPanel>
 
                             <!-- Fila 4: Checkboxes -->
-                            <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Spacing="24">
+                            <StackPanel Grid.Column="0" Grid.Row="6" Orientation="Horizontal" Spacing="24">
                                 <CheckBox IsChecked="{Binding FormEsFlotante}"
                                           Content="Usuario Flotante"
                                           FontSize="14"
@@ -431,7 +431,7 @@
                                        FontWeight="Bold"
                                        Foreground="#0b5394"/>
 
-                            <TextBlock Text="{Binding FormEsFlotante, Converter={x:Static converters:BoolToUserTypeInfoConverter.Instance}}"
+                            <TextBlock Text="Selecciona los locales donde este usuario podrá trabajar"
                                        FontSize="13"
                                        Foreground="#666666"
                                        TextWrapping="Wrap"/>
@@ -461,14 +461,13 @@
                                     <ItemsControl ItemsSource="{Binding ResultadosBusquedaLocales}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Border Background="Transparent"
+                                                <Button Background="Transparent"
+                                                        BorderThickness="0"
                                                         Padding="12"
-                                                        Cursor="Hand">
-                                                    <Border.GestureRecognizers>
-                                                        <TappedGestureRecognizer Command="{Binding $parent[ItemsControl].((vm:ManageUsersViewModel)DataContext).SeleccionarLocalCommand}"
-                                                                                 CommandParameter="{Binding}"/>
-                                                    </Border.GestureRecognizers>
-
+                                                        Cursor="Hand"
+                                                        HorizontalContentAlignment="Left"
+                                                        Command="{Binding $parent[ItemsControl].((vm:ManageUsersViewModel)DataContext).SeleccionarLocalCommand}"
+                                                        CommandParameter="{Binding}">
                                                     <StackPanel Spacing="4">
                                                         <TextBlock Text="{Binding NombreLocal}"
                                                                    FontSize="14"
@@ -478,7 +477,7 @@
                                                                    FontSize="12"
                                                                    Foreground="#666666"/>
                                                     </StackPanel>
-                                                </Border>
+                                                </Button>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
@@ -534,15 +533,15 @@
                         <Separator Background="#E0E0E0" Margin="0,8"/>
 
                         <!-- Botones del formulario -->
-                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                        <Grid ColumnDefinitions="*,Auto,12,Auto">
                             <Button Grid.Column="1"
                                     Content="Cancelar"
                                     Classes="btn-secondary"
                                     Command="{Binding CerrarFormularioCommand}"
                                     MinWidth="120"/>
 
-                            <Button Grid.Column="2"
-                                    Content="{Binding ModoEdicion, Converter={x:Static converters:BoolToSaveUserButtonTextConverter.Instance}}"
+                            <Button Grid.Column="3"
+                                    Content="Guardar Usuario"
                                     Classes="btn-primary"
                                     Command="{Binding GuardarUsuarioCommand}"
                                     MinWidth="120"/>
