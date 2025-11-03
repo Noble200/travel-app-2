@@ -1,62 +1,127 @@
-using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.Generic;
 
-namespace Allva.Desktop.Models;
+namespace Allva.Desktop.ViewModels.Admin;
 
 /// <summary>
-/// Modelo que representa un Local físico
+/// Modelo auxiliar para gestionar locales en el formulario
+/// ACTUALIZADO: Con todos los campos de la base de datos
 /// </summary>
-public partial class LocalModel : ObservableObject
+public class LocalFormModel
 {
-    [ObservableProperty]
-    private int _idLocal;
-
-    [ObservableProperty]
-    private int _idComercio;
-
-    [ObservableProperty]
-    private string _nombreComercio = string.Empty;
-
-    [ObservableProperty]
-    private string _codigoLocal = string.Empty;
-
-    [ObservableProperty]
-    private string _nombreLocal = string.Empty;
-
-    [ObservableProperty]
-    private string _direccion = string.Empty;
-
-    [ObservableProperty]
-    private string? _telefono;
-
-    [ObservableProperty]
-    private string? _email;
-
-    [ObservableProperty]
-    private string? _observaciones;
-
-    [ObservableProperty]
-    private bool _activo;
-
-    [ObservableProperty]
-    private DateTime _fechaCreacion;
-
-    // Información adicional
-    [ObservableProperty]
-    private int _numeroUsuarios;
-
+    public int IdLocal { get; set; }
+    public string CodigoLocal { get; set; } = string.Empty;
+    public string NombreLocal { get; set; } = string.Empty;
+    
+    // ============================================
+    // DIRECCIÓN COMPLETA (SEGÚN BASE DE DATOS)
+    // ============================================
+    
     /// <summary>
-    /// Estado visual para la UI
+    /// Dirección principal (calle, avenida, etc)
     /// </summary>
-    public string EstadoTexto => Activo ? "Activo" : "Inactivo";
-
+    public string Direccion { get; set; } = string.Empty;
+    
     /// <summary>
-    /// Color del estado para la UI
+    /// Número del local/establecimiento
     /// </summary>
-    public string EstadoColor => Activo ? "#0b5394" : "#595959";
-
+    public string LocalNumero { get; set; } = string.Empty;
+    
     /// <summary>
-    /// Información completa del local
+    /// Escalera (si aplica)
     /// </summary>
-    public string InformacionCompleta => $"{NombreLocal} ({CodigoLocal}) - {NombreComercio}";
+    public string? Escalera { get; set; }
+    
+    /// <summary>
+    /// Piso (si aplica)
+    /// </summary>
+    public string? Piso { get; set; }
+    
+    // ============================================
+    // DATOS DE CONTACTO Y GESTIÓN
+    // ============================================
+    
+    /// <summary>
+    /// Teléfono de contacto del local
+    /// </summary>
+    public string? Telefono { get; set; }
+    
+    /// <summary>
+    /// Email de contacto del local
+    /// </summary>
+    public string? Email { get; set; }
+    
+    /// <summary>
+    /// Número máximo de usuarios permitidos en este local
+    /// </summary>
+    public int NumeroUsuariosMax { get; set; } = 10;
+    
+    /// <summary>
+    /// Observaciones adicionales del local
+    /// </summary>
+    public string? Observaciones { get; set; }
+    
+    // ============================================
+    // ESTADO Y FECHAS
+    // ============================================
+    
+    public bool Activo { get; set; } = true;
+    
+    // ============================================
+    // PERMISOS DE MÓDULOS POR LOCAL
+    // ============================================
+    
+    public bool ModuloDivisas { get; set; } = false;
+    public bool ModuloPackAlimentos { get; set; } = false;
+    public bool ModuloBilletesAvion { get; set; } = false;
+    public bool ModuloPackViajes { get; set; } = false;
+    
+    // ============================================
+    // PROPIEDADES CALCULADAS
+    // ============================================
+    
+    /// <summary>
+    /// Dirección completa formateada para mostrar
+    /// </summary>
+    public string DireccionCompleta
+    {
+        get
+        {
+            var partes = new List<string>();
+            
+            if (!string.IsNullOrWhiteSpace(Direccion))
+                partes.Add(Direccion);
+            
+            if (!string.IsNullOrWhiteSpace(LocalNumero))
+                partes.Add($"Nº {LocalNumero}");
+            
+            if (!string.IsNullOrWhiteSpace(Escalera))
+                partes.Add($"Esc. {Escalera}");
+            
+            if (!string.IsNullOrWhiteSpace(Piso))
+                partes.Add($"Piso {Piso}");
+            
+            return partes.Count > 0 
+                ? string.Join(", ", partes) 
+                : "Sin dirección";
+        }
+    }
+    
+    /// <summary>
+    /// Resumen de permisos para mostrar en UI
+    /// </summary>
+    public string PermisosResumen
+    {
+        get
+        {
+            var permisos = new List<string>();
+            if (ModuloDivisas) permisos.Add("Divisas");
+            if (ModuloPackAlimentos) permisos.Add("Alimentos");
+            if (ModuloBilletesAvion) permisos.Add("Billetes");
+            if (ModuloPackViajes) permisos.Add("Viajes");
+            
+            return permisos.Count > 0 
+                ? string.Join(", ", permisos) 
+                : "Sin módulos";
+        }
+    }
 }

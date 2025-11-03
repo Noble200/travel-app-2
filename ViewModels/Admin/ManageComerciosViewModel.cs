@@ -13,6 +13,7 @@ namespace Allva.Desktop.ViewModels.Admin;
 /// <summary>
 /// ViewModel para el módulo de Gestión de Comercios
 /// CON CONEXIÓN A POSTGRESQL - Totalmente funcional
+/// ACTUALIZADO: Permisos por local + Cierre automático + Animación
 /// </summary>
 public partial class ManageComerciosViewModel : ObservableObject
 {
@@ -80,29 +81,15 @@ public partial class ManageComerciosViewModel : ObservableObject
     private decimal _porcentajeComisionDivisas = 0;
 
     [ObservableProperty]
-    private bool _moduloDivisas = false;
-
-    [ObservableProperty]
-    private bool _moduloPackAlimentos = false;
-
-    [ObservableProperty]
-    private bool _moduloBilletesAvion = false;
-
-    [ObservableProperty]
-    private bool _moduloPackViajes = false;
-
-    [ObservableProperty]
     private bool _activo = true;
 
     // ============================================
     // PROPIEDADES OBSERVABLES - GESTIÓN DE LOCALES
+    // ACTUALIZADO: Nombre cambiado de LocalesFormulario a Locales
     // ============================================
 
     [ObservableProperty]
-    private ObservableCollection<LocalFormModel> _localesFormulario = new();
-
-    [ObservableProperty]
-    private bool _mostrarPanelLocales = false;
+    private ObservableCollection<LocalFormModel> _locales = new();
 
     // ============================================
     // PROPIEDADES OBSERVABLES - VALIDACIÓN Y MENSAJES
@@ -167,11 +154,8 @@ public partial class ManageComerciosViewModel : ObservableObject
             Comercios.Clear();
             foreach (var comercio in comercios)
             {
-                // Cargar locales del comercio
+                // Cargar locales del comercio CON PERMISOS
                 comercio.Locales = await CargarLocalesDelComercio(connection, comercio.IdComercio);
-                
-                // Cargar permisos del comercio
-                await CargarPermisosDelComercio(connection, comercio);
                 
                 // Contar usuarios
                 comercio.TotalUsuarios = await ContarUsuariosDelComercio(connection, comercio.IdComercio);
@@ -189,6 +173,8 @@ public partial class ManageComerciosViewModel : ObservableObject
         {
             MensajeExito = $"Error al cargar datos: {ex.Message}";
             MostrarMensajeExito = true;
+            await Task.Delay(3000);
+            MostrarMensajeExito = false;
         }
         finally
         {
@@ -242,6 +228,9 @@ public partial class ManageComerciosViewModel : ObservableObject
         return comercios;
     }
 
+    /// <summary>
+    /// ACTUALIZADO: Ahora carga los permisos de módulos individuales por local
+    /// </summary>
     private async Task<List<LocalSimpleModel>> CargarLocalesDelComercio(NpgsqlConnection connection, int idComercio)
     {
         var locales = new List<LocalSimpleModel>();
@@ -252,10 +241,15 @@ public partial class ManageComerciosViewModel : ObservableObject
                 codigo_local,
                 nombre_local,
                 direccion,
-                activo
-            FROM locales
+                activo,
+                modulo_divisas,
+                modulo_pack_alimentos,
+                modulo_billetes_avion,
+                modulo_pack_viajes,
+                (SELECT COUNT(*) FROM usuarios WHERE id_local = l.id_local) as num_usuarios
+            FROM locales l
             WHERE id_comercio = @IdComercio
-            ORDER BY codigo_local";
+            ORDER BY nombre_local";
 
         using var cmd = new NpgsqlCommand(query, connection);
         cmd.Parameters.AddWithValue("@IdComercio", idComercio);
@@ -269,38 +263,17 @@ public partial class ManageComerciosViewModel : ObservableObject
                 IdLocal = reader.GetInt32(0),
                 CodigoLocal = reader.GetString(1),
                 NombreLocal = reader.GetString(2),
-                Direccion = reader.GetString(3),
+                Direccion = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
                 Activo = reader.GetBoolean(4),
-                NumeroUsuarios = 0 // Se cargará después
+                ModuloDivisas = reader.GetBoolean(5),
+                ModuloPackAlimentos = reader.GetBoolean(6),
+                ModuloBilletesAvion = reader.GetBoolean(7),
+                ModuloPackViajes = reader.GetBoolean(8),
+                NumeroUsuarios = reader.GetInt32(9)
             });
         }
 
         return locales;
-    }
-
-    private async Task CargarPermisosDelComercio(NpgsqlConnection connection, ComercioModel comercio)
-    {
-        var query = @"
-            SELECT 
-                modulo_divisas,
-                modulo_pack_alimentos,
-                modulo_billetes_avion,
-                modulo_pack_viajes
-            FROM permisos_modulos
-            WHERE id_comercio = @IdComercio";
-
-        using var cmd = new NpgsqlCommand(query, connection);
-        cmd.Parameters.AddWithValue("@IdComercio", comercio.IdComercio);
-        
-        using var reader = await cmd.ExecuteReaderAsync();
-
-        if (await reader.ReadAsync())
-        {
-            comercio.ModuloDivisas = reader.GetBoolean(0);
-            comercio.ModuloPackAlimentos = reader.GetBoolean(1);
-            comercio.ModuloBilletesAvion = reader.GetBoolean(2);
-            comercio.ModuloPackViajes = reader.GetBoolean(3);
-        }
     }
 
     private async Task<int> ContarUsuariosDelComercio(NpgsqlConnection connection, int idComercio)
@@ -322,14 +295,15 @@ public partial class ManageComerciosViewModel : ObservableObject
     // COMANDOS - NAVEGACIÓN Y VISTAS
     // ============================================
 
+    /// <summary>
+    /// ACTUALIZADO: Comando para mostrar formulario de creación
+    /// </summary>
     [RelayCommand]
-    private void NuevoComercio()
+    private void MostrarFormularioCreacion()
     {
         LimpiarFormulario();
         ModoEdicion = false;
         MostrarFormulario = true;
-        MostrarPanelLocales = false;
-        LocalesFormulario.Clear();
     }
 
     [RelayCommand]
@@ -349,6 +323,9 @@ public partial class ManageComerciosViewModel : ObservableObject
     // COMANDOS - GESTIÓN DE COMERCIOS
     // ============================================
 
+    /// <summary>
+    /// ACTUALIZADO: Ahora con animación y cierre automático
+    /// </summary>
     [RelayCommand]
     private async Task GuardarComercio()
     {
@@ -378,22 +355,29 @@ public partial class ManageComerciosViewModel : ObservableObject
             // Recargar datos
             await CargarDatosDesdeBaseDatos();
 
+            // ✅ NUEVO: Mensaje de éxito con cierre automático
             MensajeExito = ModoEdicion 
-                ? $"Comercio '{NombreComercio}' actualizado exitosamente" 
-                : $"Comercio '{NombreComercio}' creado exitosamente con {LocalesFormulario.Count} local(es)";
+                ? $"✓ Comercio '{NombreComercio}' actualizado exitosamente" 
+                : $"✓ Comercio '{NombreComercio}' creado exitosamente con {Locales.Count} local(es)";
             
             MostrarMensajeExito = true;
             
-            await Task.Delay(3000);
+            // ANIMACIÓN: Esperar 2 segundos mostrando el mensaje
+            await Task.Delay(2000);
+            
+            // Ocultar mensaje
             MostrarMensajeExito = false;
-
+            
+            // ✅ CERRAR FORMULARIO AUTOMÁTICAMENTE
             MostrarFormulario = false;
             LimpiarFormulario();
         }
         catch (Exception ex)
         {
-            MensajeExito = $"Error al guardar: {ex.Message}";
+            MensajeExito = $"❌ Error al guardar: {ex.Message}";
             MostrarMensajeExito = true;
+            await Task.Delay(4000);
+            MostrarMensajeExito = false;
         }
         finally
         {
@@ -401,6 +385,9 @@ public partial class ManageComerciosViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// ACTUALIZADO: Ahora crea locales con permisos individuales
+    /// </summary>
     private async Task CrearComercioEnBaseDatos(NpgsqlConnection connection)
     {
         // 1. Insertar comercio
@@ -428,51 +415,43 @@ public partial class ManageComerciosViewModel : ObservableObject
             idComercio = (int)(await cmd.ExecuteScalarAsync() ?? 0);
         }
 
-        // 2. Insertar permisos de módulos
-        var queryPermisos = @"
-            INSERT INTO permisos_modulos 
-            (id_comercio, modulo_divisas, modulo_pack_alimentos, modulo_billetes_avion, modulo_pack_viajes)
-            VALUES 
-            (@idComercio, @divisas, @alimentos, @billetes, @viajes)";
-
-        using (var cmd = new NpgsqlCommand(queryPermisos, connection))
-        {
-            cmd.Parameters.AddWithValue("@idComercio", idComercio);
-            cmd.Parameters.AddWithValue("@divisas", ModuloDivisas);
-            cmd.Parameters.AddWithValue("@alimentos", ModuloPackAlimentos);
-            cmd.Parameters.AddWithValue("@billetes", ModuloBilletesAvion);
-            cmd.Parameters.AddWithValue("@viajes", ModuloPackViajes);
-
-            await cmd.ExecuteNonQueryAsync();
-        }
-
-        // 3. Insertar locales
-        foreach (var local in LocalesFormulario)
+        // 2. ✅ NUEVO: Insertar locales con sus permisos individuales
+        foreach (var local in Locales)
         {
             var queryLocal = @"
                 INSERT INTO locales 
-                (id_comercio, codigo_local, nombre_local, direccion, activo)
+                (id_comercio, codigo_local, nombre_local, direccion, activo,
+                 modulo_divisas, modulo_pack_alimentos, modulo_billetes_avion, modulo_pack_viajes)
                 VALUES 
-                (@idComercio, @codigo, @nombre, @direccion, @activo)";
+                (@idComercio, @codigo, @nombre, @direccion, @activo,
+                 @moduloDivisas, @moduloAlimentos, @moduloBilletes, @moduloViajes)";
 
-            using var cmd = new NpgsqlCommand(queryLocal, connection);
-            cmd.Parameters.AddWithValue("@idComercio", idComercio);
-            cmd.Parameters.AddWithValue("@codigo", local.CodigoLocal);
-            cmd.Parameters.AddWithValue("@nombre", local.NombreLocal);
-            cmd.Parameters.AddWithValue("@direccion", local.Direccion);
-            cmd.Parameters.AddWithValue("@activo", local.Activo);
+            using var cmdLocal = new NpgsqlCommand(queryLocal, connection);
+            cmdLocal.Parameters.AddWithValue("@idComercio", idComercio);
+            cmdLocal.Parameters.AddWithValue("@codigo", local.CodigoLocal);
+            cmdLocal.Parameters.AddWithValue("@nombre", local.NombreLocal);
+            cmdLocal.Parameters.AddWithValue("@direccion", string.IsNullOrEmpty(local.Direccion) ? DBNull.Value : local.Direccion);
+            cmdLocal.Parameters.AddWithValue("@activo", local.Activo);
+            cmdLocal.Parameters.AddWithValue("@moduloDivisas", local.ModuloDivisas);
+            cmdLocal.Parameters.AddWithValue("@moduloAlimentos", local.ModuloPackAlimentos);
+            cmdLocal.Parameters.AddWithValue("@moduloBilletes", local.ModuloBilletesAvion);
+            cmdLocal.Parameters.AddWithValue("@moduloViajes", local.ModuloPackViajes);
 
-            await cmd.ExecuteNonQueryAsync();
+            await cmdLocal.ExecuteNonQueryAsync();
         }
     }
 
+    /// <summary>
+    /// ACTUALIZADO: Ahora actualiza locales con permisos individuales
+    /// </summary>
     private async Task ActualizarComercioEnBaseDatos(NpgsqlConnection connection)
     {
         if (ComercioSeleccionado == null) return;
 
-        // 1. Actualizar comercio
+        // 1. Actualizar datos del comercio
         var queryComercio = @"
-            UPDATE comercios SET
+            UPDATE comercios 
+            SET 
                 nombre_comercio = @nombre,
                 nombre_srl = @srl,
                 direccion_central = @direccion,
@@ -501,94 +480,88 @@ public partial class ManageComerciosViewModel : ObservableObject
             await cmd.ExecuteNonQueryAsync();
         }
 
-        // 2. Actualizar permisos
-        var queryPermisos = @"
-            UPDATE permisos_modulos SET
-                modulo_divisas = @divisas,
-                modulo_pack_alimentos = @alimentos,
-                modulo_billetes_avion = @billetes,
-                modulo_pack_viajes = @viajes,
-                fecha_modificacion = CURRENT_TIMESTAMP
-            WHERE id_comercio = @idComercio";
-
-        using (var cmd = new NpgsqlCommand(queryPermisos, connection))
-        {
-            cmd.Parameters.AddWithValue("@divisas", ModuloDivisas);
-            cmd.Parameters.AddWithValue("@alimentos", ModuloPackAlimentos);
-            cmd.Parameters.AddWithValue("@billetes", ModuloBilletesAvion);
-            cmd.Parameters.AddWithValue("@viajes", ModuloPackViajes);
-            cmd.Parameters.AddWithValue("@idComercio", ComercioSeleccionado.IdComercio);
-
-            await cmd.ExecuteNonQueryAsync();
-        }
-
-        // 3. Actualizar locales (eliminar existentes y crear nuevos)
-        var queryEliminarLocales = "DELETE FROM locales WHERE id_comercio = @idComercio";
-        using (var cmd = new NpgsqlCommand(queryEliminarLocales, connection))
+        // 2. Eliminar locales existentes
+        var queryDeleteLocales = "DELETE FROM locales WHERE id_comercio = @idComercio";
+        using (var cmd = new NpgsqlCommand(queryDeleteLocales, connection))
         {
             cmd.Parameters.AddWithValue("@idComercio", ComercioSeleccionado.IdComercio);
             await cmd.ExecuteNonQueryAsync();
         }
 
-        // Insertar locales actualizados
-        foreach (var local in LocalesFormulario)
+        // 3. ✅ NUEVO: Insertar locales actualizados con sus permisos individuales
+        foreach (var local in Locales)
         {
             var queryLocal = @"
                 INSERT INTO locales 
-                (id_comercio, codigo_local, nombre_local, direccion, activo)
+                (id_comercio, codigo_local, nombre_local, direccion, activo,
+                 modulo_divisas, modulo_pack_alimentos, modulo_billetes_avion, modulo_pack_viajes)
                 VALUES 
-                (@idComercio, @codigo, @nombre, @direccion, @activo)";
+                (@idComercio, @codigo, @nombre, @direccion, @activo,
+                 @moduloDivisas, @moduloAlimentos, @moduloBilletes, @moduloViajes)";
 
-            using var cmd = new NpgsqlCommand(queryLocal, connection);
-            cmd.Parameters.AddWithValue("@idComercio", ComercioSeleccionado.IdComercio);
-            cmd.Parameters.AddWithValue("@codigo", local.CodigoLocal);
-            cmd.Parameters.AddWithValue("@nombre", local.NombreLocal);
-            cmd.Parameters.AddWithValue("@direccion", local.Direccion);
-            cmd.Parameters.AddWithValue("@activo", local.Activo);
+            using var cmdLocal = new NpgsqlCommand(queryLocal, connection);
+            cmdLocal.Parameters.AddWithValue("@idComercio", ComercioSeleccionado.IdComercio);
+            cmdLocal.Parameters.AddWithValue("@codigo", local.CodigoLocal);
+            cmdLocal.Parameters.AddWithValue("@nombre", local.NombreLocal);
+            cmdLocal.Parameters.AddWithValue("@direccion", string.IsNullOrEmpty(local.Direccion) ? DBNull.Value : local.Direccion);
+            cmdLocal.Parameters.AddWithValue("@activo", local.Activo);
+            cmdLocal.Parameters.AddWithValue("@moduloDivisas", local.ModuloDivisas);
+            cmdLocal.Parameters.AddWithValue("@moduloAlimentos", local.ModuloPackAlimentos);
+            cmdLocal.Parameters.AddWithValue("@moduloBilletes", local.ModuloBilletesAvion);
+            cmdLocal.Parameters.AddWithValue("@moduloViajes", local.ModuloPackViajes);
 
-            await cmd.ExecuteNonQueryAsync();
+            await cmdLocal.ExecuteNonQueryAsync();
         }
     }
 
+    /// <summary>
+    /// ACTUALIZADO: Ahora carga locales con permisos individuales
+    /// </summary>
     [RelayCommand]
     private void EditarComercio(ComercioModel comercio)
     {
         if (comercio == null) return;
 
         ComercioSeleccionado = comercio;
-        
-        // Cargar datos en el formulario
+
+        // Cargar datos del comercio
         NombreComercio = comercio.NombreComercio;
-        NombreSrl = comercio.NombreSrl ?? string.Empty;
+        NombreSrl = string.IsNullOrEmpty(comercio.NombreSrl) ? string.Empty : comercio.NombreSrl;
         DireccionCentral = comercio.DireccionCentral;
         NumeroContacto = comercio.NumeroContacto ?? string.Empty;
         MailContacto = comercio.MailContacto;
         Pais = comercio.Pais;
         Observaciones = comercio.Observaciones ?? string.Empty;
         PorcentajeComisionDivisas = comercio.PorcentajeComisionDivisas;
-        ModuloDivisas = comercio.ModuloDivisas;
-        ModuloPackAlimentos = comercio.ModuloPackAlimentos;
-        ModuloBilletesAvion = comercio.ModuloBilletesAvion;
-        ModuloPackViajes = comercio.ModuloPackViajes;
         Activo = comercio.Activo;
 
-        // Cargar locales
-        LocalesFormulario.Clear();
+        // ✅ NUEVO: Cargar locales con sus permisos individuales Y TODOS LOS CAMPOS
+        Locales.Clear();
         foreach (var local in comercio.Locales)
         {
-            LocalesFormulario.Add(new LocalFormModel
+            Locales.Add(new LocalFormModel
             {
                 IdLocal = local.IdLocal,
                 CodigoLocal = local.CodigoLocal,
                 NombreLocal = local.NombreLocal,
                 Direccion = local.Direccion,
-                Activo = local.Activo
+                LocalNumero = local.LocalNumero,
+                Escalera = local.Escalera,
+                Piso = local.Piso,
+                Telefono = local.Telefono,
+                Email = local.Email,
+                NumeroUsuariosMax = local.NumeroUsuariosMax,
+                Observaciones = local.Observaciones,
+                Activo = local.Activo,
+                ModuloDivisas = local.ModuloDivisas,
+                ModuloPackAlimentos = local.ModuloPackAlimentos,
+                ModuloBilletesAvion = local.ModuloBilletesAvion,
+                ModuloPackViajes = local.ModuloPackViajes
             });
         }
 
         ModoEdicion = true;
         MostrarFormulario = true;
-        MostrarPanelLocales = LocalesFormulario.Count > 0;
     }
 
     [RelayCommand]
@@ -620,15 +593,7 @@ public partial class ManageComerciosViewModel : ObservableObject
                 await cmd.ExecuteNonQueryAsync();
             }
 
-            // 2. Eliminar permisos
-            var queryPermisos = "DELETE FROM permisos_modulos WHERE id_comercio = @idComercio";
-            using (var cmd = new NpgsqlCommand(queryPermisos, connection))
-            {
-                cmd.Parameters.AddWithValue("@idComercio", comercio.IdComercio);
-                await cmd.ExecuteNonQueryAsync();
-            }
-
-            // 3. Eliminar comercio
+            // 2. Eliminar comercio
             var queryComercio = "DELETE FROM comercios WHERE id_comercio = @idComercio";
             using (var cmd = new NpgsqlCommand(queryComercio, connection))
             {
@@ -649,6 +614,8 @@ public partial class ManageComerciosViewModel : ObservableObject
         {
             MensajeExito = $"Error al eliminar: {ex.Message}";
             MostrarMensajeExito = true;
+            await Task.Delay(3000);
+            MostrarMensajeExito = false;
         }
         finally
         {
@@ -691,6 +658,8 @@ public partial class ManageComerciosViewModel : ObservableObject
         {
             MensajeExito = $"Error al cambiar estado: {ex.Message}";
             MostrarMensajeExito = true;
+            await Task.Delay(3000);
+            MostrarMensajeExito = false;
         }
         finally
         {
@@ -705,22 +674,32 @@ public partial class ManageComerciosViewModel : ObservableObject
     [RelayCommand]
     private void AgregarLocal()
     {
-        var numeroLocal = LocalesFormulario.Count + 1;
+        var numeroLocal = Locales.Count + 1;
         var codigoBase = NombreComercio.Length >= 3 
             ? NombreComercio.Substring(0, 3).ToUpper() 
             : "COM";
         
         var nuevoLocal = new LocalFormModel
         {
-            IdLocal = numeroLocal,
-            CodigoLocal = $"{codigoBase}{(Comercios.Count + 1):D3}-{numeroLocal:D2}",
+            IdLocal = 0,
+            CodigoLocal = $"{codigoBase}{numeroLocal:D3}",
             NombreLocal = $"Local {numeroLocal}",
             Direccion = string.Empty,
-            Activo = true
+            LocalNumero = string.Empty,
+            Escalera = null,
+            Piso = null,
+            Telefono = null,
+            Email = null,
+            NumeroUsuariosMax = 10,
+            Observaciones = null,
+            Activo = true,
+            ModuloDivisas = false,
+            ModuloPackAlimentos = false,
+            ModuloBilletesAvion = false,
+            ModuloPackViajes = false
         };
 
-        LocalesFormulario.Add(nuevoLocal);
-        MostrarPanelLocales = true;
+        Locales.Add(nuevoLocal);
     }
 
     [RelayCommand]
@@ -728,13 +707,8 @@ public partial class ManageComerciosViewModel : ObservableObject
     {
         if (local == null) return;
         
-        LocalesFormulario.Remove(local);
+        Locales.Remove(local);
         ActualizarCodigosLocales();
-        
-        if (LocalesFormulario.Count == 0)
-        {
-            MostrarPanelLocales = false;
-        }
     }
 
     // ============================================
@@ -770,8 +744,15 @@ public partial class ManageComerciosViewModel : ObservableObject
             esValido = false;
         }
 
-        if (!ModuloDivisas && !ModuloPackAlimentos && !ModuloBilletesAvion && !ModuloPackViajes)
+        if (Locales.Count == 0)
         {
+            MensajeExito = "Debe agregar al menos un local";
+            MostrarMensajeExito = true;
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(3000);
+                MostrarMensajeExito = false;
+            });
             esValido = false;
         }
 
@@ -793,13 +774,8 @@ public partial class ManageComerciosViewModel : ObservableObject
         Pais = string.Empty;
         Observaciones = string.Empty;
         PorcentajeComisionDivisas = 0;
-        ModuloDivisas = false;
-        ModuloPackAlimentos = false;
-        ModuloBilletesAvion = false;
-        ModuloPackViajes = false;
         Activo = true;
-        LocalesFormulario.Clear();
-        MostrarPanelLocales = false;
+        Locales.Clear();
         
         ErrorNombreComercio = string.Empty;
         ErrorMailContacto = string.Empty;
@@ -812,22 +788,9 @@ public partial class ManageComerciosViewModel : ObservableObject
             ? NombreComercio.Substring(0, 3).ToUpper() 
             : "COM";
         
-        for (int i = 0; i < LocalesFormulario.Count; i++)
+        for (int i = 0; i < Locales.Count; i++)
         {
-            LocalesFormulario[i].CodigoLocal = $"{codigoBase}{(Comercios.Count + 1):D3}-{(i + 1):D2}";
-            LocalesFormulario[i].IdLocal = i + 1;
+            Locales[i].CodigoLocal = $"{codigoBase}{(i + 1):D3}";
         }
     }
-}
-
-/// <summary>
-/// Modelo auxiliar para gestionar locales en el formulario
-/// </summary>
-public class LocalFormModel
-{
-    public int IdLocal { get; set; }
-    public string CodigoLocal { get; set; } = string.Empty;
-    public string NombreLocal { get; set; } = string.Empty;
-    public string Direccion { get; set; } = string.Empty;
-    public bool Activo { get; set; } = true;
 }

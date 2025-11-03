@@ -6,6 +6,7 @@ namespace Allva.Desktop.Models.Admin;
 /// <summary>
 /// Modelo de datos para Comercios/Sucursales
 /// Representa la entidad principal que agrupa locales
+/// ACTUALIZADO: Los permisos ahora están a nivel de LOCAL, no de comercio
 /// </summary>
 public class ComercioModel
 {
@@ -61,30 +62,6 @@ public class ComercioModel
     public decimal PorcentajeComisionDivisas { get; set; } = 0;
     
     // ============================================
-    // PERMISOS DE MÓDULOS
-    // ============================================
-    
-    /// <summary>
-    /// Permiso para módulo de Divisas
-    /// </summary>
-    public bool ModuloDivisas { get; set; } = false;
-    
-    /// <summary>
-    /// Permiso para módulo de Pack de Alimentos
-    /// </summary>
-    public bool ModuloPackAlimentos { get; set; } = false;
-    
-    /// <summary>
-    /// Permiso para módulo de Billetes de Avión
-    /// </summary>
-    public bool ModuloBilletesAvion { get; set; } = false;
-    
-    /// <summary>
-    /// Permiso para módulo de Pack de Viajes
-    /// </summary>
-    public bool ModuloPackViajes { get; set; } = false;
-    
-    // ============================================
     // ESTADO Y FECHAS
     // ============================================
     
@@ -127,17 +104,124 @@ public class ComercioModel
     // ============================================
     
     /// <summary>
-    /// Texto del estado para mostrar en UI
+    /// Texto del estado para mostrar en UI (Badge de estado)
     /// </summary>
     public string EstadoTexto => Activo ? "Activo" : "Inactivo";
     
     /// <summary>
-    /// Color del estado para UI
+    /// Color del badge de estado para UI
     /// </summary>
     public string EstadoColor => Activo ? "#28a745" : "#dc3545";
     
+    // ============================================
+    // PROPIEDADES CALCULADAS PARA BOTONES
+    // ✅ NUEVAS PROPIEDADES AGREGADAS
+    // ============================================
+    
     /// <summary>
-    /// Resumen de permisos para UI
+    /// Texto del botón de cambiar estado (Desactivar/Activar)
+    /// </summary>
+    public string EstadoBotonTexto => Activo ? "Desactivar" : "Activar";
+    
+    /// <summary>
+    /// Color del botón de cambiar estado
+    /// Rojo cuando está activo (para desactivar), Verde cuando está inactivo (para activar)
+    /// </summary>
+    public string EstadoBotonColor => Activo ? "#dc3545" : "#28a745";
+}
+
+/// <summary>
+/// Modelo simplificado de Local para mostrar en la lista de comercios
+/// ACTUALIZADO: Con todos los campos de la base de datos + permisos individuales
+/// </summary>
+public class LocalSimpleModel
+{
+    public int IdLocal { get; set; }
+    public string CodigoLocal { get; set; } = string.Empty;
+    public string NombreLocal { get; set; } = string.Empty;
+    
+    // ============================================
+    // DIRECCIÓN COMPLETA (SEGÚN BASE DE DATOS)
+    // ============================================
+    
+    public string Direccion { get; set; } = string.Empty;
+    public string LocalNumero { get; set; } = string.Empty;
+    public string? Escalera { get; set; }
+    public string? Piso { get; set; }
+    
+    // ============================================
+    // DATOS DE CONTACTO Y GESTIÓN
+    // ============================================
+    
+    public string? Telefono { get; set; }
+    public string? Email { get; set; }
+    public int NumeroUsuariosMax { get; set; } = 10;
+    public string? Observaciones { get; set; }
+    
+    // ============================================
+    // ESTADO Y USUARIOS
+    // ============================================
+    
+    public bool Activo { get; set; } = true;
+    public int NumeroUsuarios { get; set; } = 0;
+    
+    // ============================================
+    // PERMISOS DE MÓDULOS POR LOCAL
+    // ============================================
+    
+    /// <summary>
+    /// Permiso para módulo de Divisas en este local
+    /// </summary>
+    public bool ModuloDivisas { get; set; } = false;
+    
+    /// <summary>
+    /// Permiso para módulo de Pack de Alimentos en este local
+    /// </summary>
+    public bool ModuloPackAlimentos { get; set; } = false;
+    
+    /// <summary>
+    /// Permiso para módulo de Billetes de Avión en este local
+    /// </summary>
+    public bool ModuloBilletesAvion { get; set; } = false;
+    
+    /// <summary>
+    /// Permiso para módulo de Pack de Viajes en este local
+    /// </summary>
+    public bool ModuloPackViajes { get; set; } = false;
+    
+    // ============================================
+    // PROPIEDADES CALCULADAS PARA UI
+    // ============================================
+    
+    /// <summary>
+    /// Dirección completa formateada para mostrar
+    /// </summary>
+    public string DireccionCompleta
+    {
+        get
+        {
+            var partes = new List<string>();
+            
+            if (!string.IsNullOrWhiteSpace(Direccion))
+                partes.Add(Direccion);
+            
+            if (!string.IsNullOrWhiteSpace(LocalNumero))
+                partes.Add($"Nº {LocalNumero}");
+            
+            if (!string.IsNullOrWhiteSpace(Escalera))
+                partes.Add($"Esc. {Escalera}");
+            
+            if (!string.IsNullOrWhiteSpace(Piso))
+                partes.Add($"Piso {Piso}");
+            
+            return partes.Count > 0 
+                ? string.Join(", ", partes) 
+                : "Sin dirección";
+        }
+    }
+    
+    /// <summary>
+    /// Resumen de permisos para mostrar en UI
     /// </summary>
     public string PermisosResumen
     {
@@ -154,17 +238,4 @@ public class ComercioModel
                 : "Sin módulos activos";
         }
     }
-}
-
-/// <summary>
-/// Modelo simplificado de Local para mostrar en la lista de comercios
-/// </summary>
-public class LocalSimpleModel
-{
-    public int IdLocal { get; set; }
-    public string CodigoLocal { get; set; } = string.Empty;
-    public string NombreLocal { get; set; } = string.Empty;
-    public string Direccion { get; set; } = string.Empty;
-    public bool Activo { get; set; } = true;
-    public int NumeroUsuarios { get; set; } = 0;
 }
