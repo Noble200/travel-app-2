@@ -5,10 +5,12 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Allva.Desktop.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Allva.Desktop.Models.Admin;
+using Allva.Desktop.Models;
 using Npgsql;
+
 
 namespace Allva.Desktop.ViewModels.Admin;
 
